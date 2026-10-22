@@ -1,0 +1,13 @@
+data/*
+!data/.gitkeep
+results/*/checkpoints/
+*.pth
+*.pt
+__pycache__/
+*.pyc
+**/__pycache__/**
+.ipynb_checkpoints/
+venv/
+.venv/
+.pytest_cache/
+.DS_Store

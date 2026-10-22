@@ -1,0 +1,13 @@
+torch
+numpy
+pillow
+pyyaml
+pandas
+scikit-image
+matplotlib
+tqdm
+pytest
+jupyter
+tabulate
+# lpips  # optional, only for the lpips metric
+# Note: On CUDA machines, install PyTorch with the CUDA build command from pytorch.org
