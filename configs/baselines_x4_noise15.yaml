@@ -1,0 +1,13 @@
+_base_: _base_x4.yaml
+experiment_name: baselines_x4_noise15
+
+degradation:
+  - name: bicubic_downscale
+  - name: gaussian_noise
+    sigma: 15
+
+models:
+  - {name: nearest}
+  - {name: bilinear}
+  - {name: bicubic}
+  - {name: lanczos}

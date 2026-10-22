@@ -1,0 +1,46 @@
+experiment_name: smoke_test
+seed: 42
+device: cpu
+scale: 2
+skip_if_done: false
+
+degradation:
+  - name: bicubic_downscale
+
+data:
+  train:
+    name: image_folder
+    root: data/dummy/train
+    patch_size: 48
+    augment: true
+    repeat: 2
+    max_images: null
+  val:
+    name: image_folder
+    root: data/dummy/val
+    max_images: null
+  test:
+    - {name: test_dummy, root: data/dummy/test}
+  loader:
+    batch_size: 4
+    num_workers: 0
+
+model:
+  name: srcnn
+  params: {}
+
+loss: {name: l1}
+optimizer: {name: adam, lr: 0.0001}
+scheduler: {name: none}
+
+training:
+  epochs: 2
+  val_every: 1
+  amp: false
+  grad_clip: null
+
+evaluation:
+  metrics:
+    - {name: psnr, y_channel: true}
+    - {name: ssim, y_channel: true}
+  save_samples: 2

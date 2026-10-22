@@ -1,0 +1,19 @@
+_base_: _base_x2.yaml
+experiment_name: espcn_x2_clean
+
+model:
+  name: espcn
+  params:
+    n1: 64
+    n2: 32
+    activation: tanh
+
+loss: {name: l1}
+optimizer: {name: adam, lr: 0.001}
+scheduler: {name: none}
+
+training:
+  epochs: 100
+  val_every: 5
+  amp: false
+  grad_clip: null

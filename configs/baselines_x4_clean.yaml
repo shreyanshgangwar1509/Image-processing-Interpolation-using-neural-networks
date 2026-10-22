@@ -1,0 +1,8 @@
+_base_: _base_x4.yaml
+experiment_name: baselines_x4_clean
+
+models:
+  - {name: nearest}
+  - {name: bilinear}
+  - {name: bicubic}
+  - {name: lanczos}

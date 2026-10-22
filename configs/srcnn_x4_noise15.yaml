@@ -1,0 +1,21 @@
+_base_: _base_x4.yaml
+experiment_name: srcnn_x4_noise15
+
+degradation:
+  - name: bicubic_downscale
+  - name: gaussian_noise
+    sigma: 15
+
+model:
+  name: srcnn
+  params: {}
+
+loss: {name: l1}
+optimizer: {name: adam, lr: 0.0001}
+scheduler: {name: none}
+
+training:
+  epochs: 100
+  val_every: 5
+  amp: false
+  grad_clip: null

@@ -1,0 +1,32 @@
+scale: 4
+skip_if_done: false
+
+degradation:
+  - name: bicubic_downscale
+
+data:
+  train:
+    name: image_folder
+    root: data/DIV2K_train_HR
+    patch_size: 96
+    augment: true
+    repeat: 10
+    max_images: null
+  val:
+    name: image_folder
+    root: data/Set14
+    max_images: null
+  test:
+    - {name: Set5, root: data/Set5}
+    - {name: Set14, root: data/Set14}
+    - {name: BSD100, root: data/BSD100}
+    - {name: Urban100, root: data/Urban100}
+  loader:
+    batch_size: 32
+    num_workers: 2
+
+evaluation:
+  metrics:
+    - {name: psnr, y_channel: true}
+    - {name: ssim, y_channel: true}
+  save_samples: 5

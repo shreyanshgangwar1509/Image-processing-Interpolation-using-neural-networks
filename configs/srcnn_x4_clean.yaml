@@ -1,0 +1,16 @@
+_base_: _base_x4.yaml
+experiment_name: srcnn_x4_clean
+
+model:
+  name: srcnn
+  params: {}
+
+loss: {name: l1}
+optimizer: {name: adam, lr: 0.0001}
+scheduler: {name: none}
+
+training:
+  epochs: 100
+  val_every: 5
+  amp: false
+  grad_clip: null
