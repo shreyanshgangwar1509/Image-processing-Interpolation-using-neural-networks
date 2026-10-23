@@ -1,0 +1,2 @@
+experiment,model,dataset,scale,degradation,noise_sigma,n_images,param_count,mean_inference_time_s,mean_psnr,mean_ssim
+smoke_test,srcnn,test_dummy,2,bicubic_down_x2,0.0,5,20099,0.011911916732788085,10.560301623149973,0.5380059929562313

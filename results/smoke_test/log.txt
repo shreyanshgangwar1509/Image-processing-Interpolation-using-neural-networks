@@ -1,0 +1,10 @@
+[2026-10-22 10:57:41] [INFO] --- Running Experiment: smoke_test ---
+[2026-10-22 10:57:41] [INFO] Using device: cpu, seed: 42
+[2026-10-22 10:57:43] [INFO] Starting training for 2 epochs on device: cpu
+[2026-10-22 10:57:44] [INFO] Epoch 001/002 - Train Loss: 0.460441 - Val PSNR: 8.5132 dB - Val SSIM: 0.4161 - LR: 1.000000e-04
+[2026-10-22 10:57:44] [INFO] Epoch 002/002 - Train Loss: 0.395115 - Val PSNR: 10.6196 dB - Val SSIM: 0.5580 - LR: 1.000000e-04
+[2026-10-22 10:57:44] [INFO] Loading best checkpoint for evaluation: results\smoke_test\checkpoints\best.pth
+[2026-10-22 10:57:44] [INFO] Evaluating model: srcnn
+[2026-10-22 10:57:44] [INFO] Metrics saved to: results\smoke_test\metrics.csv
+[2026-10-22 10:57:44] [INFO] Summary saved to: results\smoke_test\summary.json
+[2026-10-22 10:57:44] [INFO] Experiment 'smoke_test' completed successfully.
