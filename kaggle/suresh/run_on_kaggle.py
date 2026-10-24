@@ -20,14 +20,13 @@ from pathlib import Path
 
 # ============================ EDIT THESE ============================
 REPO_URL = "https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git"   # must be public, or use a code dataset
-BRANCH = "main"
+BRANCH = "exp-v1"
 
 # Configs to run, in this order. Keep one stage per push (see the steps in the chat).
 CONFIGS = [
-    "configs/our_nn_x4_clean.yaml",
+    "configs/our_nn_x4_clean_a0_plain.yaml",
 ]
 
-CONFIGS = ["configs/our_nn_x4_clean.yaml"]
 # EXTRA_SET = ["data.loader.num_workers=4", "data.train.repeat=3"]
 EXTRA_SET = ["data.loader.num_workers=4", "data.train.repeat=3", "evaluation.save_samples=1"]
 
@@ -39,8 +38,8 @@ INPUT = Path(os.environ.get("KAGGLE_INPUT_DIR", "/kaggle/input"))
 WORK = Path(os.environ.get("KAGGLE_WORK_DIR", "/kaggle/working"))
 REPO = Path(os.environ.get("REPO_DIR", "/tmp/sr-project"))   # not under /working, so it is not saved as output
 DATA_FOLDERS = ["DIV2K_train_HR", "Set5", "Set14", "BSD100", "Urban100"]
-# SYNC_EVERY = float(os.environ.get("SYNC_EVERY", 300))   # seconds between result copies during training
-# RUN_START = 0.0   # set in main() after the repo is cloned; only results newer than this are copied out
+SYNC_EVERY = float(os.environ.get("SYNC_EVERY", 300))   # seconds between result copies during training
+RUN_START = 0.0   # set in main() after the repo is cloned; only results newer than this are copied out
 
 
 def sh(cmd, **kw):

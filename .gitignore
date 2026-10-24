@@ -16,5 +16,5 @@ results/baselines_x2_clean/samples
 results/baselines_x4_clean/samples
 results/baselines_x4_noise15/samples
 results/our_nn_x4_clean/samples
-results/smoke_test/samples
+results/smoke_test
 kaggle_out/
