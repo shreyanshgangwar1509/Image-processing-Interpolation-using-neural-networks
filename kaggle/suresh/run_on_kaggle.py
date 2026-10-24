@@ -26,10 +26,7 @@ BRANCH = "main"
 # ]
 
 CONFIGS = ["configs/our_nn_x4_clean.yaml"]
-EXTRA_SET = ["training.epochs=2", "data.train.max_images=50"]
-# Extra overrides for every config, e.g. a quick trial:
-#   ["training.epochs=2", "data.train.max_images=50"]
-EXTRA_SET: list = []
+EXTRA_SET = ["data.loader.num_workers=4", "data.train.repeat=3"]
 
 # Do not START a new config after this many hours (Kaggle sessions end at about 9 h).
 MAX_HOURS = 8.0
