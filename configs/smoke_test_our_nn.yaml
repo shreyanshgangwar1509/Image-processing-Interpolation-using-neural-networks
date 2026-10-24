@@ -2,7 +2,7 @@ experiment_name: smoke_test_our_nn
 seed: 42
 device: cpu
 scale: 2
-skip_if_done: false
+skip_if_done: true
 
 degradation:
   - name: bicubic_downscale
