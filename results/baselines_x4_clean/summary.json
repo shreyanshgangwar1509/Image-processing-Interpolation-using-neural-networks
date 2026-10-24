@@ -1,0 +1,183 @@
+{
+  "experiment_name": "baselines_x4_clean",
+  "scale": 4,
+  "degradation": "bicubic_down_x4",
+  "summary": [
+    {
+      "model": "nearest",
+      "dataset": "Set5",
+      "n_images": 5,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0002086162567138672,
+      "metrics": {
+        "psnr": 26.258249822676,
+        "ssim": 0.7380066524702337
+      }
+    },
+    {
+      "model": "nearest",
+      "dataset": "Set14",
+      "n_images": 14,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0003478527069091797,
+      "metrics": {
+        "psnr": 24.741050896967657,
+        "ssim": 0.6553270398574662
+      }
+    },
+    {
+      "model": "nearest",
+      "dataset": "BSD100",
+      "n_images": 100,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0003099727630615234,
+      "metrics": {
+        "psnr": 25.037816584737165,
+        "ssim": 0.629963944858272
+      }
+    },
+    {
+      "model": "nearest",
+      "dataset": "Urban100",
+      "n_images": 100,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0010254335403442382,
+      "metrics": {
+        "psnr": 22.17465477665878,
+        "ssim": 0.6160307817020221
+      }
+    },
+    {
+      "model": "bilinear",
+      "dataset": "Set5",
+      "n_images": 5,
+      "param_count": 0,
+      "mean_inference_time_s": 0.000591278076171875,
+      "metrics": {
+        "psnr": 27.560396004815033,
+        "ssim": 0.7895735553011682
+      }
+    },
+    {
+      "model": "bilinear",
+      "dataset": "Set14",
+      "n_images": 14,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0008427926472255162,
+      "metrics": {
+        "psnr": 25.515700765912445,
+        "ssim": 0.6820553047841181
+      }
+    },
+    {
+      "model": "bilinear",
+      "dataset": "BSD100",
+      "n_images": 100,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0005437374114990234,
+      "metrics": {
+        "psnr": 25.54541734823205,
+        "ssim": 0.6469130113142234
+      }
+    },
+    {
+      "model": "bilinear",
+      "dataset": "Urban100",
+      "n_images": 100,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0026936411857604982,
+      "metrics": {
+        "psnr": 22.68834818626793,
+        "ssim": 0.635398188951206
+      }
+    },
+    {
+      "model": "bicubic",
+      "dataset": "Set5",
+      "n_images": 5,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0016241073608398438,
+      "metrics": {
+        "psnr": 28.63442336008231,
+        "ssim": 0.8138309757468276
+      }
+    },
+    {
+      "model": "bicubic",
+      "dataset": "Set14",
+      "n_images": 14,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0025477749960763113,
+      "metrics": {
+        "psnr": 26.220922057833068,
+        "ssim": 0.7088648946451492
+      }
+    },
+    {
+      "model": "bicubic",
+      "dataset": "BSD100",
+      "n_images": 100,
+      "param_count": 0,
+      "mean_inference_time_s": 0.0017157912254333497,
+      "metrics": {
+        "psnr": 26.052155145300876,
+        "ssim": 0.6721749181083961
+      }
+    },
+    {
+      "model": "bicubic",
+      "dataset": "Urban100",
+      "n_images": 100,
+      "param_count": 0,
+      "mean_inference_time_s": 0.008600642681121826,
+      "metrics": {
+        "psnr": 23.242093300500173,
+        "ssim": 0.6616025497402432
+      }
+    },
+    {
+      "model": "lanczos",
+      "dataset": "Set5",
+      "n_images": 5,
+      "param_count": 0,
+      "mean_inference_time_s": 0.00334019660949707,
+      "metrics": {
+        "psnr": 28.814602570342668,
+        "ssim": 0.8182018543273882
+      }
+    },
+    {
+      "model": "lanczos",
+      "dataset": "Set14",
+      "n_images": 14,
+      "param_count": 0,
+      "mean_inference_time_s": 0.006504058837890625,
+      "metrics": {
+        "psnr": 26.31920002713827,
+        "ssim": 0.7130048968610964
+      }
+    },
+    {
+      "model": "lanczos",
+      "dataset": "BSD100",
+      "n_images": 100,
+      "param_count": 0,
+      "mean_inference_time_s": 0.00445549726486206,
+      "metrics": {
+        "psnr": 26.126979774783525,
+        "ssim": 0.6758434495297112
+      }
+    },
+    {
+      "model": "lanczos",
+      "dataset": "Urban100",
+      "n_images": 100,
+      "param_count": 0,
+      "mean_inference_time_s": 0.02241803169250488,
+      "metrics": {
+        "psnr": 23.32526095937701,
+        "ssim": 0.6653569492833011
+      }
+    }
+  ]
+}

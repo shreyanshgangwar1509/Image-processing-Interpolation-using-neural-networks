@@ -1,0 +1,9 @@
+[2026-10-24 07:15:13] [INFO] --- Running Experiment: baselines_x4_clean ---
+[2026-10-24 07:15:13] [INFO] Using device: cpu, seed: 42
+[2026-10-24 07:15:13] [INFO] Evaluating model: nearest
+[2026-10-24 07:15:29] [INFO] Evaluating model: bilinear
+[2026-10-24 07:15:46] [INFO] Evaluating model: bicubic
+[2026-10-24 07:16:03] [INFO] Evaluating model: lanczos
+[2026-10-24 07:16:22] [INFO] Metrics saved to: results\baselines_x4_clean\metrics.csv
+[2026-10-24 07:16:22] [INFO] Summary saved to: results\baselines_x4_clean\summary.json
+[2026-10-24 07:16:22] [INFO] Experiment 'baselines_x4_clean' completed successfully.

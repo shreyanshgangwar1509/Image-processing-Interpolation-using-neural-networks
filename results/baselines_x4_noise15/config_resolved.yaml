@@ -1,0 +1,43 @@
+data:
+  loader:
+    batch_size: 32
+    num_workers: 2
+  test:
+  - name: Set5
+    root: data/Set5
+  - name: Set14
+    root: data/Set14
+  - name: BSD100
+    root: data/BSD100
+  - name: Urban100
+    root: data/Urban100
+  train:
+    augment: true
+    max_images: null
+    name: image_folder
+    patch_size: 96
+    repeat: 10
+    root: data/DIV2K_train_HR
+  val:
+    max_images: null
+    name: image_folder
+    root: data/Set14
+degradation:
+- name: bicubic_downscale
+- name: gaussian_noise
+  sigma: 15
+evaluation:
+  metrics:
+  - name: psnr
+    y_channel: true
+  - name: ssim
+    y_channel: true
+  save_samples: 5
+experiment_name: baselines_x4_noise15
+models:
+- name: nearest
+- name: bilinear
+- name: bicubic
+- name: lanczos
+scale: 4
+skip_if_done: false
