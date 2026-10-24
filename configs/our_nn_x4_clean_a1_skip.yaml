@@ -1,0 +1,29 @@
+_base_: _base_x4.yaml
+experiment_name: our_nn_x4_clean_a1_skip
+
+data:
+  loader:
+    batch_size: 16
+    num_workers: 2
+
+model:
+  name: our_nn
+  params:
+    n_feats: 32
+    n_blocks: 6
+    res_scale: 0.1
+    reduction: 4
+    bicubic_skip: true
+    attention: false
+    edge_branch: false
+    zero_init_tail: true
+
+loss: {name: l1}
+optimizer: {name: adam, lr: 0.0002}
+scheduler: {name: step, step_size: 40, gamma: 0.5}
+
+training:
+  epochs: 100
+  val_every: 5
+  amp: false
+  grad_clip: null
