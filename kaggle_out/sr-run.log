@@ -1,0 +1,36 @@
+[{"stream_name":"stdout","time":0.887261067,"data":"$ nvidia-smi\n"}
+,{"stream_name":"stdout","time":0.93719493,"data":"Sat Oct 24 03:34:25 2026       \n"}
+,{"stream_name":"stdout","time":0.937230913,"data":"+-----------------------------------------------------------------------------------------+\n"}
+,{"stream_name":"stdout","time":0.93723675,"data":"| NVIDIA-SMI 580.178.04             Driver Version: 580.178.04     CUDA Version: 13.0     |\n"}
+,{"stream_name":"stdout","time":0.937240825,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
+,{"stream_name":"stdout","time":0.937244586,"data":"| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n"}
+,{"stream_name":"stdout","time":0.937274408,"data":"| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n"}
+,{"stream_name":"stdout","time":0.937279384,"data":"|                                         |                        |               MIG M. |\n"}
+,{"stream_name":"stdout","time":0.937283596,"data":"|=========================================+========================+======================|\n"}
+,{"stream_name":"stdout","time":1.023273577,"data":"|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |\n"}
+,{"stream_name":"stdout","time":1.023468159,"data":"| N/A   43C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |\n"}
+,{"stream_name":"stdout","time":1.023475217,"data":"|                                         |                        |                  N/A |\n"}
+,{"stream_name":"stdout","time":1.023480402,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
+,{"stream_name":"stdout","time":1.023485733,"data":"|   1  Tesla T4                       Off |   00000000:00:05.0 Off |                    0 |\n"}
+,{"stream_name":"stdout","time":1.023491039,"data":"| N/A   44C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |\n"}
+,{"stream_name":"stdout","time":1.023496286,"data":"|                                         |                        |                  N/A |\n"}
+,{"stream_name":"stdout","time":1.02350167,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
+,{"stream_name":"stdout","time":1.025351979,"data":"\n"}
+,{"stream_name":"stdout","time":1.025367683,"data":"+-----------------------------------------------------------------------------------------+\n"}
+,{"stream_name":"stdout","time":1.025372487,"data":"| Processes:                                                                              |\n"}
+,{"stream_name":"stdout","time":1.02537772,"data":"|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n"}
+,{"stream_name":"stdout","time":1.025382981,"data":"|        ID   ID                                                               Usage      |\n"}
+,{"stream_name":"stdout","time":1.025388329,"data":"|=========================================================================================|\n"}
+,{"stream_name":"stdout","time":1.02704415,"data":"|  No running processes found                                                             |\n"}
+,{"stream_name":"stdout","time":1.027061508,"data":"+-----------------------------------------------------------------------------------------+\n"}
+,{"stream_name":"stdout","time":1.539250806,"data":"$ git clone --depth 1 -b main https://github.com/YOUR_USER/YOUR_REPO.git /tmp/sr-project\n"}
+,{"stream_name":"stderr","time":1.579604038,"data":"Cloning into '/tmp/sr-project'...\n"}
+,{"stream_name":"stderr","time":2.053195744,"data":"fatal: could not read Username for 'https://github.com': No such device or address\n"}
+,{"stream_name":"stderr","time":2.061214494,"data":"git clone failed. Check REPO_URL / BRANCH, that the repo is public and that Internet is enabled for this kernel (enable_internet in kernel-metadata.json).\n"}
+,{"stream_name":"stderr","time":4.450828252,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":4.450858844,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":4.875670485,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":4.875696148,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":6.977565337,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":8.074455168,"data":"[NbConvertApp] Writing 297017 bytes to __results__.html\n"}
+]

@@ -11,3 +11,7 @@ venv/
 .venv/
 .pytest_cache/
 .DS_Store
+
+results/baselines_x2_clean/samples
+results/baselines_x4_clean/samples
+results/baselines_x4_noise15/samples
