@@ -1,0 +1,51 @@
+{
+  "experiment_name": "our_nn_x4_clean_a2_attn",
+  "scale": 4,
+  "degradation": "bicubic_down_x4",
+  "summary": [
+    {
+      "model": "our_nn",
+      "dataset": "Set5",
+      "n_images": 5,
+      "param_count": 199283,
+      "mean_inference_time_s": 0.008083009719848632,
+      "metrics": {
+        "psnr": 30.39843105959783,
+        "ssim": 0.8616120682983652
+      }
+    },
+    {
+      "model": "our_nn",
+      "dataset": "Set14",
+      "n_images": 14,
+      "param_count": 199283,
+      "mean_inference_time_s": 0.007891467639378138,
+      "metrics": {
+        "psnr": 27.45222548736433,
+        "ssim": 0.7528106972356017
+      }
+    },
+    {
+      "model": "our_nn",
+      "dataset": "BSD100",
+      "n_images": 100,
+      "param_count": 199283,
+      "mean_inference_time_s": 0.005941741466522217,
+      "metrics": {
+        "psnr": 26.84748744901822,
+        "ssim": 0.7111884570934979
+      }
+    },
+    {
+      "model": "our_nn",
+      "dataset": "Urban100",
+      "n_images": 100,
+      "param_count": 199283,
+      "mean_inference_time_s": 0.023438305854797364,
+      "metrics": {
+        "psnr": 24.300981228687377,
+        "ssim": 0.7159936338303765
+      }
+    }
+  ]
+}
