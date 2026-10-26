@@ -1,0 +1,51 @@
+{
+  "experiment_name": "srcnn_x4_noise15",
+  "scale": 4,
+  "degradation": "bicubic_down_x4+gaussian_noise_s15",
+  "summary": [
+    {
+      "model": "srcnn",
+      "dataset": "Set5",
+      "n_images": 5,
+      "param_count": 20099,
+      "mean_inference_time_s": 0.007214689254760742,
+      "metrics": {
+        "psnr": 27.38751366941767,
+        "ssim": 0.7724350648196331
+      }
+    },
+    {
+      "model": "srcnn",
+      "dataset": "Set14",
+      "n_images": 14,
+      "param_count": 20099,
+      "mean_inference_time_s": 0.010190214429582869,
+      "metrics": {
+        "psnr": 25.4599132244304,
+        "ssim": 0.6612874517591629
+      }
+    },
+    {
+      "model": "srcnn",
+      "dataset": "BSD100",
+      "n_images": 100,
+      "param_count": 20099,
+      "mean_inference_time_s": 0.007333731651306153,
+      "metrics": {
+        "psnr": 25.301698727655808,
+        "ssim": 0.6234810693442278
+      }
+    },
+    {
+      "model": "srcnn",
+      "dataset": "Urban100",
+      "n_images": 100,
+      "param_count": 20099,
+      "mean_inference_time_s": 0.03183767795562744,
+      "metrics": {
+        "psnr": 22.87808546134273,
+        "ssim": 0.6326266776464772
+      }
+    }
+  ]
+}
