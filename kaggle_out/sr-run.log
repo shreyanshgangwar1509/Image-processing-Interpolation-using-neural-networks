@@ -1,174 +1,174 @@
-[{"stream_name":"stdout","time":0.820332368,"data":"CONFIGS   = ['configs/our_nn_x4_noise15_a2_attn.yaml']\n"}
-,{"stream_name":"stdout","time":0.820367393,"data":"EXTRA_SET = ['data.loader.num_workers=4', 'data.train.repeat=3', 'evaluation.save_samples=1']\n"}
-,{"stream_name":"stdout","time":0.820389774,"data":"MAX_HOURS = 8.0\n"}
-,{"stream_name":"stdout","time":0.820394741,"data":"$ nvidia-smi\n"}
-,{"stream_name":"stdout","time":0.857064868,"data":"Sun Oct 25 17:35:03 2026       \n"}
-,{"stream_name":"stdout","time":0.857088261,"data":"+-----------------------------------------------------------------------------------------+\n"}
-,{"stream_name":"stdout","time":0.857093662,"data":"| NVIDIA-SMI 580.178.04             Driver Version: 580.178.04     CUDA Version: 13.0     |\n"}
-,{"stream_name":"stdout","time":0.857098635,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
-,{"stream_name":"stdout","time":0.857103532,"data":"| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n"}
-,{"stream_name":"stdout","time":0.857107982,"data":"| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n"}
-,{"stream_name":"stdout","time":0.857112344,"data":"|                                         |                        |               MIG M. |\n"}
-,{"stream_name":"stdout","time":0.857116757,"data":"|=========================================+========================+======================|\n"}
-,{"stream_name":"stdout","time":0.90897924,"data":"|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |\n"}
-,{"stream_name":"stdout","time":0.909014415,"data":"| N/A   54C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |\n"}
-,{"stream_name":"stdout","time":0.909019964,"data":"|                                         |                        |                  N/A |\n"}
-,{"stream_name":"stdout","time":0.90904044,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
-,{"stream_name":"stdout","time":0.909045388,"data":"|   1  Tesla T4                       Off |   00000000:00:05.0 Off |                    0 |\n"}
-,{"stream_name":"stdout","time":0.909050598,"data":"| N/A   55C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |\n"}
-,{"stream_name":"stdout","time":0.909055693,"data":"|                                         |                        |                  N/A |\n"}
-,{"stream_name":"stdout","time":0.909060755,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
-,{"stream_name":"stdout","time":0.909759704,"data":"\n"}
-,{"stream_name":"stdout","time":0.90977458,"data":"+-----------------------------------------------------------------------------------------+\n"}
-,{"stream_name":"stdout","time":0.909778335,"data":"| Processes:                                                                              |\n"}
-,{"stream_name":"stdout","time":0.909782116,"data":"|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n"}
-,{"stream_name":"stdout","time":0.909786658,"data":"|        ID   ID                                                               Usage      |\n"}
-,{"stream_name":"stdout","time":0.909791978,"data":"|=========================================================================================|\n"}
-,{"stream_name":"stdout","time":0.91133882,"data":"|  No running processes found                                                             |\n"}
-,{"stream_name":"stdout","time":0.911353226,"data":"+-----------------------------------------------------------------------------------------+\n"}
-,{"stream_name":"stdout","time":1.244834945,"data":"$ git clone --depth 1 -b exp-v2 https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git /tmp/sr-project\n"}
-,{"stream_name":"stderr","time":1.2769742069999999,"data":"Cloning into '/tmp/sr-project'...\n"}
-,{"stream_name":"stderr","time":2.5277989339999998,"data":"Note: switching to '5320e8018de4659b7879ca5407edfb65bbbd30c9'.\n"}
-,{"stream_name":"stderr","time":2.527825093,"data":"\n"}
-,{"stream_name":"stderr","time":2.527830151,"data":"You are in 'detached HEAD' state. You can look around, make experimental\n"}
-,{"stream_name":"stderr","time":2.5278346259999998,"data":"changes and commit them, and you can discard any commits you make in this\n"}
-,{"stream_name":"stderr","time":2.5278402250000003,"data":"state without impacting any branches by switching back to a branch.\n"}
-,{"stream_name":"stderr","time":2.527844697,"data":"\n"}
-,{"stream_name":"stderr","time":2.527848481,"data":"If you want to create a new branch to retain commits you create, you may\n"}
-,{"stream_name":"stderr","time":2.5278535030000002,"data":"do so (now or later) by using -c with the switch command. Example:\n"}
-,{"stream_name":"stderr","time":2.527858108,"data":"\n"}
-,{"stream_name":"stderr","time":2.527862194,"data":"  git switch -c \u003cnew-branch-name\u003e\n"}
-,{"stream_name":"stderr","time":2.527866952,"data":"\n"}
-,{"stream_name":"stderr","time":2.527870897,"data":"Or undo this operation with:\n"}
-,{"stream_name":"stderr","time":2.527874873,"data":"\n"}
-,{"stream_name":"stderr","time":2.527879157,"data":"  git switch -\n"}
-,{"stream_name":"stderr","time":2.527883414,"data":"\n"}
-,{"stream_name":"stderr","time":2.527887804,"data":"Turn off this advice by setting config variable advice.detachedHead to false\n"}
-,{"stream_name":"stderr","time":2.527895987,"data":"\n"}
-,{"stream_name":"stdout","time":2.562881498,"data":"linked data/DIV2K_train_HR -\u003e /kaggle/input/datasets/suresh79061/sr-data/div2k/DIV2K_train_HR\n"}
-,{"stream_name":"stdout","time":4.749023392,"data":"linked data/Set5 -\u003e /kaggle/input/datasets/suresh79061/sr-data/benchmarks/Set5\n"}
-,{"stream_name":"stdout","time":4.754807263,"data":"linked data/Set14 -\u003e /kaggle/input/datasets/suresh79061/sr-data/benchmarks/Set14\n"}
-,{"stream_name":"stdout","time":4.7607249,"data":"linked data/BSD100 -\u003e /kaggle/input/datasets/suresh79061/sr-data/benchmarks/BSD100\n"}
-,{"stream_name":"stdout","time":4.766150483,"data":"linked data/Urban100 -\u003e /kaggle/input/datasets/suresh79061/sr-data/benchmarks/Urban100\n"}
-,{"stream_name":"stdout","time":4.766167777,"data":"$ /usr/bin/python3 -m pip install -q pyyaml scikit-image tqdm pandas pillow\n"}
-,{"stream_name":"stdout","time":8.566211746,"data":"$ /usr/bin/python3 scripts/train.py --config configs/our_nn_x4_noise15_a2_attn.yaml --set data.loader.num_workers=4 --set data.train.repeat=3 --set evaluation.save_samples=1\n"}
-,{"stream_name":"stdout","time":18.096804632,"data":"[2026-10-25 17:35:20] [INFO] --- Running Experiment: our_nn_x4_noise15_a2_attn ---\n"}
-,{"stream_name":"stdout","time":18.355658533,"data":"[2026-10-25 17:35:21] [INFO] Using device: cuda, seed: 42\n"}
-,{"stream_name":"stderr","time":24.886147642,"data":"/tmp/sr-project/src/training/trainer.py:99: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.\n"}
-,{"stream_name":"stderr","time":24.886170631,"data":"  scaler = torch.cuda.amp.GradScaler(enabled=use_amp)\n"}
-,{"stream_name":"stdout","time":24.886191157,"data":"[2026-10-25 17:35:27] [INFO] Starting training for 100 epochs on device: cuda\n"}
-,{"stream_name":"stdout","time":131.683512887,"data":"[2026-10-25 17:37:14] [INFO] Epoch 001/100 - Train Loss: 0.048615 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":231.180199543,"data":"[2026-10-25 17:38:54] [INFO] Epoch 002/100 - Train Loss: 0.044181 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":329.918364505,"data":"[2026-10-25 17:40:32] [INFO] Epoch 003/100 - Train Loss: 0.043128 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":427.610080897,"data":"[2026-10-25 17:42:10] [INFO] Epoch 004/100 - Train Loss: 0.042714 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":530.3095663,"data":"[2026-10-25 17:43:53] [INFO] Epoch 005/100 - Train Loss: 0.042800 - Val PSNR: 24.7428 dB - Val SSIM: 0.6346 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":633.333118709,"data":"[2026-10-25 17:45:36] [INFO] Epoch 006/100 - Train Loss: 0.042342 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":736.684416006,"data":"[2026-10-25 17:47:19] [INFO] Epoch 007/100 - Train Loss: 0.041425 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":838.813409251,"data":"[2026-10-25 17:49:01] [INFO] Epoch 008/100 - Train Loss: 0.041188 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":939.989241356,"data":"[2026-10-25 17:50:42] [INFO] Epoch 009/100 - Train Loss: 0.040466 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1041.432498324,"data":"[2026-10-25 17:52:24] [INFO] Epoch 010/100 - Train Loss: 0.039796 - Val PSNR: 25.2218 dB - Val SSIM: 0.6511 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1143.814789952,"data":"[2026-10-25 17:54:06] [INFO] Epoch 011/100 - Train Loss: 0.040617 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1246.623094111,"data":"[2026-10-25 17:55:49] [INFO] Epoch 012/100 - Train Loss: 0.039303 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1350.180672642,"data":"[2026-10-25 17:57:33] [INFO] Epoch 013/100 - Train Loss: 0.039326 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1453.173410265,"data":"[2026-10-25 17:59:16] [INFO] Epoch 014/100 - Train Loss: 0.039267 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1555.32517359,"data":"[2026-10-25 18:00:58] [INFO] Epoch 015/100 - Train Loss: 0.039090 - Val PSNR: 25.3621 dB - Val SSIM: 0.6587 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1658.76121536,"data":"[2026-10-25 18:02:41] [INFO] Epoch 016/100 - Train Loss: 0.039678 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1760.152401106,"data":"[2026-10-25 18:04:23] [INFO] Epoch 017/100 - Train Loss: 0.039192 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1863.598012717,"data":"[2026-10-25 18:06:06] [INFO] Epoch 018/100 - Train Loss: 0.039748 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":1968.044064267,"data":"[2026-10-25 18:07:50] [INFO] Epoch 019/100 - Train Loss: 0.038888 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2070.905037543,"data":"[2026-10-25 18:09:33] [INFO] Epoch 020/100 - Train Loss: 0.038362 - Val PSNR: 25.4195 dB - Val SSIM: 0.6618 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2174.000164154,"data":"[2026-10-25 18:11:16] [INFO] Epoch 021/100 - Train Loss: 0.038268 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2277.203974704,"data":"[2026-10-25 18:13:00] [INFO] Epoch 022/100 - Train Loss: 0.038781 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2379.23541207,"data":"[2026-10-25 18:14:42] [INFO] Epoch 023/100 - Train Loss: 0.038509 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2480.792421078,"data":"[2026-10-25 18:16:23] [INFO] Epoch 024/100 - Train Loss: 0.038685 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2584.835326375,"data":"[2026-10-25 18:18:07] [INFO] Epoch 025/100 - Train Loss: 0.038211 - Val PSNR: 25.5033 dB - Val SSIM: 0.6655 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2689.619575867,"data":"[2026-10-25 18:19:52] [INFO] Epoch 026/100 - Train Loss: 0.037936 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2793.612585469,"data":"[2026-10-25 18:21:36] [INFO] Epoch 027/100 - Train Loss: 0.037643 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2897.750783282,"data":"[2026-10-25 18:23:20] [INFO] Epoch 028/100 - Train Loss: 0.037811 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":2998.597078233,"data":"[2026-10-25 18:25:01] [INFO] Epoch 029/100 - Train Loss: 0.037483 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3103.424421161,"data":"[2026-10-25 18:26:46] [INFO] Epoch 030/100 - Train Loss: 0.037495 - Val PSNR: 25.5312 dB - Val SSIM: 0.6675 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3204.969205197,"data":"[2026-10-25 18:28:27] [INFO] Epoch 031/100 - Train Loss: 0.037498 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3307.054013374,"data":"[2026-10-25 18:30:09] [INFO] Epoch 032/100 - Train Loss: 0.038234 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3408.82450797,"data":"[2026-10-25 18:31:51] [INFO] Epoch 033/100 - Train Loss: 0.037569 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3513.206916643,"data":"[2026-10-25 18:33:36] [INFO] Epoch 034/100 - Train Loss: 0.038390 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3616.30689065,"data":"[2026-10-25 18:35:19] [INFO] Epoch 035/100 - Train Loss: 0.036737 - Val PSNR: 25.5739 dB - Val SSIM: 0.6682 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3721.493211226,"data":"[2026-10-25 18:37:04] [INFO] Epoch 036/100 - Train Loss: 0.037449 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3825.759183289,"data":"[2026-10-25 18:38:48] [INFO] Epoch 037/100 - Train Loss: 0.037640 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":3928.987847319,"data":"[2026-10-25 18:40:31] [INFO] Epoch 038/100 - Train Loss: 0.037534 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":4033.134023372,"data":"[2026-10-25 18:42:16] [INFO] Epoch 039/100 - Train Loss: 0.037414 - LR: 2.000000e-04\n"}
-,{"stream_name":"stdout","time":4137.691420177,"data":"[2026-10-25 18:44:00] [INFO] Epoch 040/100 - Train Loss: 0.037690 - Val PSNR: 25.6140 dB - Val SSIM: 0.6704 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":4240.226543614,"data":"[2026-10-25 18:45:43] [INFO] Epoch 041/100 - Train Loss: 0.037283 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":4341.691113921,"data":"[2026-10-25 18:47:24] [INFO] Epoch 042/100 - Train Loss: 0.036748 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":4443.71505306,"data":"[2026-10-25 18:49:06] [INFO] Epoch 043/100 - Train Loss: 0.037521 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":4544.741753889,"data":"[2026-10-25 18:50:47] [INFO] Epoch 044/100 - Train Loss: 0.037257 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":4642.925786717,"data":"[2026-10-25 18:52:25] [INFO] Epoch 045/100 - Train Loss: 0.035995 - Val PSNR: 25.6214 dB - Val SSIM: 0.6698 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":4742.616248639,"data":"[2026-10-25 18:54:05] [INFO] Epoch 046/100 - Train Loss: 0.037385 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":4845.524849612,"data":"[2026-10-25 18:55:48] [INFO] Epoch 047/100 - Train Loss: 0.038044 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":4949.12280263,"data":"[2026-10-25 18:57:32] [INFO] Epoch 048/100 - Train Loss: 0.037637 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5052.548228239,"data":"[2026-10-25 18:59:15] [INFO] Epoch 049/100 - Train Loss: 0.037300 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5153.736720655,"data":"[2026-10-25 19:00:56] [INFO] Epoch 050/100 - Train Loss: 0.037555 - Val PSNR: 25.6356 dB - Val SSIM: 0.6704 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5256.214259396,"data":"[2026-10-25 19:02:39] [INFO] Epoch 051/100 - Train Loss: 0.036419 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5359.185018898,"data":"[2026-10-25 19:04:22] [INFO] Epoch 052/100 - Train Loss: 0.037344 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5461.126198421,"data":"[2026-10-25 19:06:04] [INFO] Epoch 053/100 - Train Loss: 0.037204 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5562.849860656,"data":"[2026-10-25 19:07:45] [INFO] Epoch 054/100 - Train Loss: 0.037184 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5663.753281718,"data":"[2026-10-25 19:09:26] [INFO] Epoch 055/100 - Train Loss: 0.037447 - Val PSNR: 25.6544 dB - Val SSIM: 0.6719 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5766.304041242,"data":"[2026-10-25 19:11:09] [INFO] Epoch 056/100 - Train Loss: 0.037738 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5869.124416713,"data":"[2026-10-25 19:12:52] [INFO] Epoch 057/100 - Train Loss: 0.036664 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":5970.821700127,"data":"[2026-10-25 19:14:33] [INFO] Epoch 058/100 - Train Loss: 0.036776 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6070.845656251,"data":"[2026-10-25 19:16:13] [INFO] Epoch 059/100 - Train Loss: 0.037003 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6172.452100194,"data":"[2026-10-25 19:17:55] [INFO] Epoch 060/100 - Train Loss: 0.036792 - Val PSNR: 25.6740 dB - Val SSIM: 0.6722 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6273.610810535,"data":"[2026-10-25 19:19:36] [INFO] Epoch 061/100 - Train Loss: 0.036996 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6375.486422045,"data":"[2026-10-25 19:21:18] [INFO] Epoch 062/100 - Train Loss: 0.036524 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6476.858667012,"data":"[2026-10-25 19:22:59] [INFO] Epoch 063/100 - Train Loss: 0.037185 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6578.891348077,"data":"[2026-10-25 19:24:41] [INFO] Epoch 064/100 - Train Loss: 0.036383 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6681.836259227,"data":"[2026-10-25 19:26:24] [INFO] Epoch 065/100 - Train Loss: 0.037314 - Val PSNR: 25.6924 dB - Val SSIM: 0.6734 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6782.183968299,"data":"[2026-10-25 19:28:05] [INFO] Epoch 066/100 - Train Loss: 0.036675 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6882.52138962,"data":"[2026-10-25 19:29:45] [INFO] Epoch 067/100 - Train Loss: 0.036858 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":6983.263996929,"data":"[2026-10-25 19:31:26] [INFO] Epoch 068/100 - Train Loss: 0.037057 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7084.436243609,"data":"[2026-10-25 19:33:07] [INFO] Epoch 069/100 - Train Loss: 0.037727 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7185.709050298,"data":"[2026-10-25 19:34:48] [INFO] Epoch 070/100 - Train Loss: 0.037639 - Val PSNR: 25.6963 dB - Val SSIM: 0.6737 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7288.107385016,"data":"[2026-10-25 19:36:31] [INFO] Epoch 071/100 - Train Loss: 0.036692 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7390.242642176,"data":"[2026-10-25 19:38:13] [INFO] Epoch 072/100 - Train Loss: 0.037116 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7491.663242089,"data":"[2026-10-25 19:39:54] [INFO] Epoch 073/100 - Train Loss: 0.036473 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7594.483765798,"data":"[2026-10-25 19:41:37] [INFO] Epoch 074/100 - Train Loss: 0.036964 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7697.374519194,"data":"[2026-10-25 19:43:20] [INFO] Epoch 075/100 - Train Loss: 0.036453 - Val PSNR: 25.7021 dB - Val SSIM: 0.6733 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7797.211253308,"data":"[2026-10-25 19:45:00] [INFO] Epoch 076/100 - Train Loss: 0.036735 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":7899.334530856,"data":"[2026-10-25 19:46:42] [INFO] Epoch 077/100 - Train Loss: 0.036849 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":8001.564733542,"data":"[2026-10-25 19:48:24] [INFO] Epoch 078/100 - Train Loss: 0.036949 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":8103.06115635,"data":"[2026-10-25 19:50:05] [INFO] Epoch 079/100 - Train Loss: 0.036532 - LR: 1.000000e-04\n"}
-,{"stream_name":"stdout","time":8205.50254243,"data":"[2026-10-25 19:51:48] [INFO] Epoch 080/100 - Train Loss: 0.036353 - Val PSNR: 25.7017 dB - Val SSIM: 0.6737 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":8306.032094551,"data":"[2026-10-25 19:53:28] [INFO] Epoch 081/100 - Train Loss: 0.036781 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":8407.134490938,"data":"[2026-10-25 19:55:10] [INFO] Epoch 082/100 - Train Loss: 0.036024 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":8509.590794636,"data":"[2026-10-25 19:56:52] [INFO] Epoch 083/100 - Train Loss: 0.036734 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":8611.574335131,"data":"[2026-10-25 19:58:34] [INFO] Epoch 084/100 - Train Loss: 0.036556 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":8715.185415009,"data":"[2026-10-25 20:00:18] [INFO] Epoch 085/100 - Train Loss: 0.036744 - Val PSNR: 25.7318 dB - Val SSIM: 0.6750 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":8815.91757119,"data":"[2026-10-25 20:01:58] [INFO] Epoch 086/100 - Train Loss: 0.036647 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":8916.992051978,"data":"[2026-10-25 20:03:39] [INFO] Epoch 087/100 - Train Loss: 0.037196 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9018.064775197,"data":"[2026-10-25 20:05:20] [INFO] Epoch 088/100 - Train Loss: 0.036247 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9120.099538238,"data":"[2026-10-25 20:07:03] [INFO] Epoch 089/100 - Train Loss: 0.037046 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9221.527856928,"data":"[2026-10-25 20:08:44] [INFO] Epoch 090/100 - Train Loss: 0.036811 - Val PSNR: 25.7209 dB - Val SSIM: 0.6738 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9322.701090688,"data":"[2026-10-25 20:10:25] [INFO] Epoch 091/100 - Train Loss: 0.035967 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9424.041696664,"data":"[2026-10-25 20:12:06] [INFO] Epoch 092/100 - Train Loss: 0.036512 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9526.82386639,"data":"[2026-10-25 20:13:49] [INFO] Epoch 093/100 - Train Loss: 0.037569 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9630.482641055,"data":"[2026-10-25 20:15:33] [INFO] Epoch 094/100 - Train Loss: 0.036352 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9731.623932271,"data":"[2026-10-25 20:17:14] [INFO] Epoch 095/100 - Train Loss: 0.036183 - Val PSNR: 25.6963 dB - Val SSIM: 0.6726 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9833.254456301,"data":"[2026-10-25 20:18:56] [INFO] Epoch 096/100 - Train Loss: 0.036339 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":9934.732207532,"data":"[2026-10-25 20:20:37] [INFO] Epoch 097/100 - Train Loss: 0.036286 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":10034.460039013,"data":"[2026-10-25 20:22:17] [INFO] Epoch 098/100 - Train Loss: 0.036861 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":10135.204222525,"data":"[2026-10-25 20:23:58] [INFO] Epoch 099/100 - Train Loss: 0.036892 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":10237.783313487,"data":"[2026-10-25 20:25:40] [INFO] Epoch 100/100 - Train Loss: 0.036128 - Val PSNR: 25.7250 dB - Val SSIM: 0.6742 - LR: 5.000000e-05\n"}
-,{"stream_name":"stdout","time":10237.791492216,"data":"[2026-10-25 20:25:40] [INFO] Loading best checkpoint for evaluation: results/our_nn_x4_noise15_a2_attn/checkpoints/best.pth\n"}
-,{"stream_name":"stdout","time":10237.817053901,"data":"[2026-10-25 20:25:40] [INFO] Evaluating model: our_nn\n"}
-,{"stream_name":"stdout","time":10259.474865935,"data":"[2026-10-25 20:26:02] [INFO] Metrics saved to: results/our_nn_x4_noise15_a2_attn/metrics.csv\n"}
-,{"stream_name":"stdout","time":10259.494849221,"data":"[2026-10-25 20:26:02] [INFO] Summary saved to: results/our_nn_x4_noise15_a2_attn/summary.json\n"}
-,{"stream_name":"stdout","time":10259.494869392,"data":"[2026-10-25 20:26:02] [INFO] Experiment 'our_nn_x4_noise15_a2_attn' completed successfully.\n"}
-,{"stream_name":"stdout","time":10265.831129219,"data":"config | status | minutes\n"}
-,{"stream_name":"stdout","time":10265.831156499,"data":"configs/our_nn_x4_noise15_a2_attn.yaml | ok | 171.0\n"}
-,{"stream_name":"stdout","time":10265.831159769,"data":"total hours: 2.85\n"}
-,{"stream_name":"stderr","time":10267.989783976,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
-,{"stream_name":"stderr","time":10267.989810081,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
-,{"stream_name":"stderr","time":10268.294806202,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
-,{"stream_name":"stderr","time":10268.294848148,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
-,{"stream_name":"stderr","time":10269.125184702,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
-,{"stream_name":"stderr","time":10270.171082824,"data":"[NbConvertApp] Writing 303254 bytes to __results__.html\n"}
+[{"stream_name":"stdout","time":0.773022933,"data":"CONFIGS   = ['configs/srcnn_x4_clean.yaml']\n"}
+,{"stream_name":"stdout","time":0.77306153,"data":"EXTRA_SET = ['data.loader.num_workers=4', 'data.train.repeat=3', 'evaluation.save_samples=1']\n"}
+,{"stream_name":"stdout","time":0.773065837,"data":"MAX_HOURS = 8.0\n"}
+,{"stream_name":"stdout","time":0.773069159,"data":"$ nvidia-smi\n"}
+,{"stream_name":"stdout","time":0.809920107,"data":"Mon Oct 26 07:23:22 2026       \n"}
+,{"stream_name":"stdout","time":0.809953927,"data":"+-----------------------------------------------------------------------------------------+\n"}
+,{"stream_name":"stdout","time":0.809958154,"data":"| NVIDIA-SMI 580.178.04             Driver Version: 580.178.04     CUDA Version: 13.0     |\n"}
+,{"stream_name":"stdout","time":0.809960968,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
+,{"stream_name":"stdout","time":0.809964174,"data":"| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n"}
+,{"stream_name":"stdout","time":0.809966926,"data":"| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n"}
+,{"stream_name":"stdout","time":0.809969633,"data":"|                                         |                        |               MIG M. |\n"}
+,{"stream_name":"stdout","time":0.809972358,"data":"|=========================================+========================+======================|\n"}
+,{"stream_name":"stdout","time":0.865669555,"data":"|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |\n"}
+,{"stream_name":"stdout","time":0.865694909,"data":"| N/A   37C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |\n"}
+,{"stream_name":"stdout","time":0.865700213,"data":"|                                         |                        |                  N/A |\n"}
+,{"stream_name":"stdout","time":0.865704618,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
+,{"stream_name":"stdout","time":0.865708643,"data":"|   1  Tesla T4                       Off |   00000000:00:05.0 Off |                    0 |\n"}
+,{"stream_name":"stdout","time":0.865712667,"data":"| N/A   43C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |\n"}
+,{"stream_name":"stdout","time":0.865716951,"data":"|                                         |                        |                  N/A |\n"}
+,{"stream_name":"stdout","time":0.865721214,"data":"+-----------------------------------------+------------------------+----------------------+\n"}
+,{"stream_name":"stdout","time":0.866345448,"data":"\n"}
+,{"stream_name":"stdout","time":0.866363242,"data":"+-----------------------------------------------------------------------------------------+\n"}
+,{"stream_name":"stdout","time":0.866367981,"data":"| Processes:                                                                              |\n"}
+,{"stream_name":"stdout","time":0.866372339,"data":"|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n"}
+,{"stream_name":"stdout","time":0.866376479,"data":"|        ID   ID                                                               Usage      |\n"}
+,{"stream_name":"stdout","time":0.866380575,"data":"|=========================================================================================|\n"}
+,{"stream_name":"stdout","time":0.868118313,"data":"|  No running processes found                                                             |\n"}
+,{"stream_name":"stdout","time":0.868135418,"data":"+-----------------------------------------------------------------------------------------+\n"}
+,{"stream_name":"stdout","time":1.5623326789999998,"data":"$ git clone --depth 1 -b exp-v2 https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git /tmp/sr-project\n"}
+,{"stream_name":"stderr","time":1.597693764,"data":"Cloning into '/tmp/sr-project'...\n"}
+,{"stream_name":"stderr","time":2.140267774,"data":"Note: switching to '5320e8018de4659b7879ca5407edfb65bbbd30c9'.\n"}
+,{"stream_name":"stderr","time":2.1402919320000002,"data":"\n"}
+,{"stream_name":"stderr","time":2.140297056,"data":"You are in 'detached HEAD' state. You can look around, make experimental\n"}
+,{"stream_name":"stderr","time":2.140301605,"data":"changes and commit them, and you can discard any commits you make in this\n"}
+,{"stream_name":"stderr","time":2.140306009,"data":"state without impacting any branches by switching back to a branch.\n"}
+,{"stream_name":"stderr","time":2.140309854,"data":"\n"}
+,{"stream_name":"stderr","time":2.140313128,"data":"If you want to create a new branch to retain commits you create, you may\n"}
+,{"stream_name":"stderr","time":2.140316612,"data":"do so (now or later) by using -c with the switch command. Example:\n"}
+,{"stream_name":"stderr","time":2.1403201960000002,"data":"\n"}
+,{"stream_name":"stderr","time":2.140323537,"data":"  git switch -c \u003cnew-branch-name\u003e\n"}
+,{"stream_name":"stderr","time":2.140327523,"data":"\n"}
+,{"stream_name":"stderr","time":2.140330879,"data":"Or undo this operation with:\n"}
+,{"stream_name":"stderr","time":2.140334282,"data":"\n"}
+,{"stream_name":"stderr","time":2.140337633,"data":"  git switch -\n"}
+,{"stream_name":"stderr","time":2.140341079,"data":"\n"}
+,{"stream_name":"stderr","time":2.140344467,"data":"Turn off this advice by setting config variable advice.detachedHead to false\n"}
+,{"stream_name":"stderr","time":2.140348153,"data":"\n"}
+,{"stream_name":"stdout","time":2.487503902,"data":"linked data/DIV2K_train_HR -\u003e /kaggle/input/datasets/suresh79061/sr-data/div2k/DIV2K_train_HR\n"}
+,{"stream_name":"stdout","time":2.488510309,"data":"linked data/Set5 -\u003e /kaggle/input/datasets/suresh79061/sr-data/benchmarks/Set5\n"}
+,{"stream_name":"stdout","time":2.489278341,"data":"linked data/Set14 -\u003e /kaggle/input/datasets/suresh79061/sr-data/benchmarks/Set14\n"}
+,{"stream_name":"stdout","time":2.490301163,"data":"linked data/BSD100 -\u003e /kaggle/input/datasets/suresh79061/sr-data/benchmarks/BSD100\n"}
+,{"stream_name":"stdout","time":2.491125121,"data":"linked data/Urban100 -\u003e /kaggle/input/datasets/suresh79061/sr-data/benchmarks/Urban100\n"}
+,{"stream_name":"stdout","time":2.491142947,"data":"$ /usr/bin/python3 -m pip install -q pyyaml scikit-image tqdm pandas pillow\n"}
+,{"stream_name":"stdout","time":6.232424517,"data":"$ /usr/bin/python3 scripts/train.py --config configs/srcnn_x4_clean.yaml --set data.loader.num_workers=4 --set data.train.repeat=3 --set evaluation.save_samples=1\n"}
+,{"stream_name":"stdout","time":15.243116201,"data":"[2026-10-26 07:23:36] [INFO] --- Running Experiment: srcnn_x4_clean ---\n"}
+,{"stream_name":"stdout","time":15.506381473,"data":"[2026-10-26 07:23:36] [INFO] Using device: cuda, seed: 42\n"}
+,{"stream_name":"stderr","time":21.747478429,"data":"/tmp/sr-project/src/training/trainer.py:99: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.\n"}
+,{"stream_name":"stderr","time":21.747516171,"data":"  scaler = torch.cuda.amp.GradScaler(enabled=use_amp)\n"}
+,{"stream_name":"stdout","time":21.747613911,"data":"[2026-10-26 07:23:43] [INFO] Starting training for 100 epochs on device: cuda\n"}
+,{"stream_name":"stdout","time":148.732316798,"data":"[2026-10-26 07:25:50] [INFO] Epoch 001/100 - Train Loss: 0.196482 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":249.951883505,"data":"[2026-10-26 07:27:31] [INFO] Epoch 002/100 - Train Loss: 0.079773 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":350.9871888,"data":"[2026-10-26 07:29:12] [INFO] Epoch 003/100 - Train Loss: 0.060898 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":454.332383763,"data":"[2026-10-26 07:30:55] [INFO] Epoch 004/100 - Train Loss: 0.051267 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":557.008302204,"data":"[2026-10-26 07:32:38] [INFO] Epoch 005/100 - Train Loss: 0.046370 - Val PSNR: 24.9869 dB - Val SSIM: 0.6653 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":659.579278658,"data":"[2026-10-26 07:34:20] [INFO] Epoch 006/100 - Train Loss: 0.043207 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":761.698097541,"data":"[2026-10-26 07:36:03] [INFO] Epoch 007/100 - Train Loss: 0.041700 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":863.828167102,"data":"[2026-10-26 07:37:45] [INFO] Epoch 008/100 - Train Loss: 0.039564 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":967.136746545,"data":"[2026-10-26 07:39:28] [INFO] Epoch 009/100 - Train Loss: 0.038292 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1072.126882506,"data":"[2026-10-26 07:41:13] [INFO] Epoch 010/100 - Train Loss: 0.037467 - Val PSNR: 25.6876 dB - Val SSIM: 0.6902 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1176.116764482,"data":"[2026-10-26 07:42:57] [INFO] Epoch 011/100 - Train Loss: 0.036059 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1282.490295346,"data":"[2026-10-26 07:44:43] [INFO] Epoch 012/100 - Train Loss: 0.035340 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1385.875905851,"data":"[2026-10-26 07:46:27] [INFO] Epoch 013/100 - Train Loss: 0.035475 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1490.533592779,"data":"[2026-10-26 07:48:11] [INFO] Epoch 014/100 - Train Loss: 0.034840 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1596.732449457,"data":"[2026-10-26 07:49:58] [INFO] Epoch 015/100 - Train Loss: 0.033745 - Val PSNR: 25.9388 dB - Val SSIM: 0.6986 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1700.166426485,"data":"[2026-10-26 07:51:41] [INFO] Epoch 016/100 - Train Loss: 0.033464 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1802.39655741,"data":"[2026-10-26 07:53:23] [INFO] Epoch 017/100 - Train Loss: 0.033728 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":1904.228625768,"data":"[2026-10-26 07:55:05] [INFO] Epoch 018/100 - Train Loss: 0.033745 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2005.871598913,"data":"[2026-10-26 07:56:47] [INFO] Epoch 019/100 - Train Loss: 0.032844 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2110.167189279,"data":"[2026-10-26 07:58:31] [INFO] Epoch 020/100 - Train Loss: 0.033033 - Val PSNR: 26.0558 dB - Val SSIM: 0.7024 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2211.019693451,"data":"[2026-10-26 08:00:12] [INFO] Epoch 021/100 - Train Loss: 0.032958 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2314.896187509,"data":"[2026-10-26 08:01:56] [INFO] Epoch 022/100 - Train Loss: 0.032771 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2416.23474208,"data":"[2026-10-26 08:03:37] [INFO] Epoch 023/100 - Train Loss: 0.032259 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2518.791299842,"data":"[2026-10-26 08:05:20] [INFO] Epoch 024/100 - Train Loss: 0.032738 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2621.379782235,"data":"[2026-10-26 08:07:02] [INFO] Epoch 025/100 - Train Loss: 0.032921 - Val PSNR: 26.1339 dB - Val SSIM: 0.7061 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2724.141006376,"data":"[2026-10-26 08:08:45] [INFO] Epoch 026/100 - Train Loss: 0.031927 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2829.674631705,"data":"[2026-10-26 08:10:31] [INFO] Epoch 027/100 - Train Loss: 0.032721 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":2933.896382757,"data":"[2026-10-26 08:12:15] [INFO] Epoch 028/100 - Train Loss: 0.032325 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3038.251138204,"data":"[2026-10-26 08:13:59] [INFO] Epoch 029/100 - Train Loss: 0.031804 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3145.759357951,"data":"[2026-10-26 08:15:47] [INFO] Epoch 030/100 - Train Loss: 0.031697 - Val PSNR: 26.1938 dB - Val SSIM: 0.7090 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3250.932434551,"data":"[2026-10-26 08:17:32] [INFO] Epoch 031/100 - Train Loss: 0.032034 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3355.015512915,"data":"[2026-10-26 08:19:16] [INFO] Epoch 032/100 - Train Loss: 0.032327 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3457.497778808,"data":"[2026-10-26 08:20:58] [INFO] Epoch 033/100 - Train Loss: 0.031997 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3562.248875769,"data":"[2026-10-26 08:22:43] [INFO] Epoch 034/100 - Train Loss: 0.031373 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3666.582923631,"data":"[2026-10-26 08:24:27] [INFO] Epoch 035/100 - Train Loss: 0.031571 - Val PSNR: 26.2503 dB - Val SSIM: 0.7108 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3771.139344129,"data":"[2026-10-26 08:26:12] [INFO] Epoch 036/100 - Train Loss: 0.031819 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3874.26918955,"data":"[2026-10-26 08:27:55] [INFO] Epoch 037/100 - Train Loss: 0.032132 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":3979.709178425,"data":"[2026-10-26 08:29:41] [INFO] Epoch 038/100 - Train Loss: 0.030843 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4082.624182174,"data":"[2026-10-26 08:31:23] [INFO] Epoch 039/100 - Train Loss: 0.031633 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4190.645517929,"data":"[2026-10-26 08:33:12] [INFO] Epoch 040/100 - Train Loss: 0.031202 - Val PSNR: 26.2925 dB - Val SSIM: 0.7126 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4294.679944459,"data":"[2026-10-26 08:34:56] [INFO] Epoch 041/100 - Train Loss: 0.031257 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4400.044803803,"data":"[2026-10-26 08:36:41] [INFO] Epoch 042/100 - Train Loss: 0.031443 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4506.446034044,"data":"[2026-10-26 08:38:27] [INFO] Epoch 043/100 - Train Loss: 0.031966 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4612.405820961,"data":"[2026-10-26 08:40:13] [INFO] Epoch 044/100 - Train Loss: 0.031641 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4716.660955921,"data":"[2026-10-26 08:41:58] [INFO] Epoch 045/100 - Train Loss: 0.030375 - Val PSNR: 26.3385 dB - Val SSIM: 0.7145 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4819.098360883,"data":"[2026-10-26 08:43:40] [INFO] Epoch 046/100 - Train Loss: 0.031229 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":4922.749041744,"data":"[2026-10-26 08:45:24] [INFO] Epoch 047/100 - Train Loss: 0.031536 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5031.342394313,"data":"[2026-10-26 08:47:12] [INFO] Epoch 048/100 - Train Loss: 0.031737 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5135.441158165,"data":"[2026-10-26 08:48:56] [INFO] Epoch 049/100 - Train Loss: 0.030503 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5241.755537581,"data":"[2026-10-26 08:50:43] [INFO] Epoch 050/100 - Train Loss: 0.030802 - Val PSNR: 26.3772 dB - Val SSIM: 0.7160 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5346.160339531,"data":"[2026-10-26 08:52:27] [INFO] Epoch 051/100 - Train Loss: 0.030933 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5448.566656079,"data":"[2026-10-26 08:54:09] [INFO] Epoch 052/100 - Train Loss: 0.030583 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5551.719703737,"data":"[2026-10-26 08:55:53] [INFO] Epoch 053/100 - Train Loss: 0.030672 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5658.747680099,"data":"[2026-10-26 08:57:40] [INFO] Epoch 054/100 - Train Loss: 0.031549 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5767.190771485,"data":"[2026-10-26 08:59:28] [INFO] Epoch 055/100 - Train Loss: 0.029927 - Val PSNR: 26.4096 dB - Val SSIM: 0.7173 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5872.031713954,"data":"[2026-10-26 09:01:13] [INFO] Epoch 056/100 - Train Loss: 0.029931 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":5974.140712024,"data":"[2026-10-26 09:02:55] [INFO] Epoch 057/100 - Train Loss: 0.030315 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6080.6486699,"data":"[2026-10-26 09:04:42] [INFO] Epoch 058/100 - Train Loss: 0.031140 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6185.6529838,"data":"[2026-10-26 09:06:27] [INFO] Epoch 059/100 - Train Loss: 0.030144 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6291.109652319,"data":"[2026-10-26 09:08:12] [INFO] Epoch 060/100 - Train Loss: 0.030652 - Val PSNR: 26.4420 dB - Val SSIM: 0.7185 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6394.558451582,"data":"[2026-10-26 09:09:55] [INFO] Epoch 061/100 - Train Loss: 0.030474 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6500.768668579,"data":"[2026-10-26 09:11:42] [INFO] Epoch 062/100 - Train Loss: 0.029989 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6603.316255369,"data":"[2026-10-26 09:13:24] [INFO] Epoch 063/100 - Train Loss: 0.029946 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6710.291419484,"data":"[2026-10-26 09:15:11] [INFO] Epoch 064/100 - Train Loss: 0.030337 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6817.892349139,"data":"[2026-10-26 09:16:59] [INFO] Epoch 065/100 - Train Loss: 0.030482 - Val PSNR: 26.4569 dB - Val SSIM: 0.7197 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":6921.917508593,"data":"[2026-10-26 09:18:43] [INFO] Epoch 066/100 - Train Loss: 0.030891 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7027.72770081,"data":"[2026-10-26 09:20:29] [INFO] Epoch 067/100 - Train Loss: 0.030010 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7130.65333288,"data":"[2026-10-26 09:22:12] [INFO] Epoch 068/100 - Train Loss: 0.030133 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7234.489480676,"data":"[2026-10-26 09:23:55] [INFO] Epoch 069/100 - Train Loss: 0.030455 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7336.456497081,"data":"[2026-10-26 09:25:37] [INFO] Epoch 070/100 - Train Loss: 0.029365 - Val PSNR: 26.4712 dB - Val SSIM: 0.7203 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7439.731491274,"data":"[2026-10-26 09:27:21] [INFO] Epoch 071/100 - Train Loss: 0.030459 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7542.735657388,"data":"[2026-10-26 09:29:04] [INFO] Epoch 072/100 - Train Loss: 0.030291 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7646.026756814,"data":"[2026-10-26 09:30:47] [INFO] Epoch 073/100 - Train Loss: 0.030391 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7751.299346054,"data":"[2026-10-26 09:32:32] [INFO] Epoch 074/100 - Train Loss: 0.030984 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7855.836292907,"data":"[2026-10-26 09:34:17] [INFO] Epoch 075/100 - Train Loss: 0.030887 - Val PSNR: 26.5122 dB - Val SSIM: 0.7213 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":7964.490287323,"data":"[2026-10-26 09:36:05] [INFO] Epoch 076/100 - Train Loss: 0.030495 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8067.328544067,"data":"[2026-10-26 09:37:48] [INFO] Epoch 077/100 - Train Loss: 0.030152 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8172.31308332,"data":"[2026-10-26 09:39:33] [INFO] Epoch 078/100 - Train Loss: 0.029613 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8276.446179567,"data":"[2026-10-26 09:41:17] [INFO] Epoch 079/100 - Train Loss: 0.029826 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8381.860811701,"data":"[2026-10-26 09:43:03] [INFO] Epoch 080/100 - Train Loss: 0.030664 - Val PSNR: 26.5335 dB - Val SSIM: 0.7219 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8486.903173062,"data":"[2026-10-26 09:44:48] [INFO] Epoch 081/100 - Train Loss: 0.029361 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8592.81796497,"data":"[2026-10-26 09:46:34] [INFO] Epoch 082/100 - Train Loss: 0.030051 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8695.379860243,"data":"[2026-10-26 09:48:16] [INFO] Epoch 083/100 - Train Loss: 0.030552 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8798.158832076,"data":"[2026-10-26 09:49:59] [INFO] Epoch 084/100 - Train Loss: 0.029710 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":8902.343110772,"data":"[2026-10-26 09:51:43] [INFO] Epoch 085/100 - Train Loss: 0.030099 - Val PSNR: 26.5507 dB - Val SSIM: 0.7225 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9008.480346976,"data":"[2026-10-26 09:53:29] [INFO] Epoch 086/100 - Train Loss: 0.030732 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9110.452737512,"data":"[2026-10-26 09:55:11] [INFO] Epoch 087/100 - Train Loss: 0.029575 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9213.48419114,"data":"[2026-10-26 09:56:54] [INFO] Epoch 088/100 - Train Loss: 0.030370 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9319.507801999,"data":"[2026-10-26 09:58:40] [INFO] Epoch 089/100 - Train Loss: 0.030910 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9423.611986684,"data":"[2026-10-26 10:00:24] [INFO] Epoch 090/100 - Train Loss: 0.029944 - Val PSNR: 26.5384 dB - Val SSIM: 0.7231 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9527.099718627,"data":"[2026-10-26 10:02:08] [INFO] Epoch 091/100 - Train Loss: 0.030664 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9628.820923069,"data":"[2026-10-26 10:03:50] [INFO] Epoch 092/100 - Train Loss: 0.029482 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9732.090376755,"data":"[2026-10-26 10:05:33] [INFO] Epoch 093/100 - Train Loss: 0.029712 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9837.831385131,"data":"[2026-10-26 10:07:19] [INFO] Epoch 094/100 - Train Loss: 0.030303 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":9942.148964269,"data":"[2026-10-26 10:09:03] [INFO] Epoch 095/100 - Train Loss: 0.030080 - Val PSNR: 26.5821 dB - Val SSIM: 0.7239 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":10045.360801321,"data":"[2026-10-26 10:10:46] [INFO] Epoch 096/100 - Train Loss: 0.030378 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":10148.495411883,"data":"[2026-10-26 10:12:29] [INFO] Epoch 097/100 - Train Loss: 0.029337 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":10250.065059981,"data":"[2026-10-26 10:14:11] [INFO] Epoch 098/100 - Train Loss: 0.029958 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":10354.987391771,"data":"[2026-10-26 10:15:56] [INFO] Epoch 099/100 - Train Loss: 0.030189 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":10461.070011311,"data":"[2026-10-26 10:17:42] [INFO] Epoch 100/100 - Train Loss: 0.029597 - Val PSNR: 26.5984 dB - Val SSIM: 0.7244 - LR: 1.000000e-04\n"}
+,{"stream_name":"stdout","time":10461.078959307,"data":"[2026-10-26 10:17:42] [INFO] Loading best checkpoint for evaluation: results/srcnn_x4_clean/checkpoints/best.pth\n"}
+,{"stream_name":"stdout","time":10461.087695538,"data":"[2026-10-26 10:17:42] [INFO] Evaluating model: srcnn\n"}
+,{"stream_name":"stdout","time":10505.609101023,"data":"[2026-10-26 10:18:26] [INFO] Metrics saved to: results/srcnn_x4_clean/metrics.csv\n"}
+,{"stream_name":"stdout","time":10505.626917838,"data":"[2026-10-26 10:18:26] [INFO] Summary saved to: results/srcnn_x4_clean/summary.json\n"}
+,{"stream_name":"stdout","time":10505.626959479,"data":"[2026-10-26 10:18:26] [INFO] Experiment 'srcnn_x4_clean' completed successfully.\n"}
+,{"stream_name":"stdout","time":10511.419709603,"data":"config | status | minutes\n"}
+,{"stream_name":"stdout","time":10511.419746936,"data":"configs/srcnn_x4_clean.yaml | ok | 175.1\n"}
+,{"stream_name":"stdout","time":10511.419752814,"data":"total hours: 2.92\n"}
+,{"stream_name":"stderr","time":10513.667455713,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":10513.667493746,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":10513.971667627,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":10513.971695527,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":10514.817120684,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":10515.883168583,"data":"[NbConvertApp] Writing 303243 bytes to __results__.html\n"}
 ]

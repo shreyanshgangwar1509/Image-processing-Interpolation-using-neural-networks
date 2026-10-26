@@ -24,7 +24,7 @@ BRANCH = "exp-v2"
 
 # Configs to run, in this order. Keep one stage per push (see the steps in the chat).
 CONFIGS = [
-    "configs/our_nn_x4_noise15_a2_attn.yaml",
+    "configs/srcnn_x4_clean.yaml",
 ]
 
 # EXTRA_SET = ["data.loader.num_workers=4", "data.train.repeat=3"]
