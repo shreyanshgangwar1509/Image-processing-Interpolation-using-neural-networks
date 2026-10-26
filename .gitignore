@@ -20,6 +20,7 @@ results/smoke_test
 results/our_nn_x4_clean_a2_attn/samples
 results/our_nn_x4_clean_a0_plain/samples
 results/our_nn*/samples
+results/srcnn*/samples
 kaggle_out/
 kaggle_out2
 kaggle2
