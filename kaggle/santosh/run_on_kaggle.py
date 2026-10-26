@@ -20,11 +20,12 @@ from pathlib import Path
 
 # ============================ EDIT THESE ============================
 REPO_URL = "https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git"   # must be public, or use a code dataset
-BRANCH = "exp-v4"
+BRANCH = "exp-v1"
 
 # Configs to run, in this order. Keep one stage per push (see the steps in the chat).
 CONFIGS = [
     "configs/srcnn_x4_clean.yaml",
+    "configs/srcnn_x4_noise15.yaml",
 ]
 
 # EXTRA_SET = ["data.loader.num_workers=4", "data.train.repeat=3"]
