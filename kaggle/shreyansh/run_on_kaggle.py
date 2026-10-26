@@ -19,12 +19,12 @@ import time
 from pathlib import Path
 
 # ============================ EDIT THESE ============================
-REPO_URL = "https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git"   # must be public, or use a code dataset
-BRANCH = "exp-v2"
+REPO_URL = "https://github.com/shreyanshgangwar1509/Image-processing-Interpolation-using-neural-networks.git"   # must be public, or use a code dataset
+BRANCH = "main"
 
 # Configs to run, in this order. Keep one stage per push (see the steps in the chat).
 CONFIGS = [
-    "configs/our_nn_x4_clean_a2_attn.yaml",
+    "configs/our_nn_x4_noise15_a0_plain.yaml",
 ]
 
 # EXTRA_SET = ["data.loader.num_workers=4", "data.train.repeat=3"]
