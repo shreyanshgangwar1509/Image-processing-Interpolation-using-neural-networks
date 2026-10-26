@@ -20,7 +20,7 @@ from pathlib import Path
 
 # ============================ EDIT THESE ============================
 REPO_URL = "https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git"   # must be public, or use a code dataset
-BRANCH = "exp-v1"
+BRANCH = "exp-v4"
 
 # Configs to run, in this order. Keep one stage per push (see the steps in the chat).
 CONFIGS = [
