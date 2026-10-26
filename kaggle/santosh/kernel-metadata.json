@@ -4,11 +4,10 @@
   "code_file": "run_on_kaggle.py",
   "language": "python",
   "kernel_type": "script",
-  "is_private": "true",
-  "enable_gpu": "true",
-  "enable_tpu": "false",
-  "enable_internet": "true",
-  "dataset_sources": ["suresh79061/sr-data"],
-  "competition_sources": [],
-  "kernel_sources": []
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "suresh79061/sr-data"
+  ]
 }
