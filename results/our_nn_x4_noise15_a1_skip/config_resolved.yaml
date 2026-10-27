@@ -1,0 +1,63 @@
+data:
+  loader:
+    batch_size: 16
+    num_workers: 4
+  test:
+  - name: Set5
+    root: data/Set5
+  - name: Set14
+    root: data/Set14
+  - name: BSD100
+    root: data/BSD100
+  - name: Urban100
+    root: data/Urban100
+  train:
+    augment: true
+    max_images: null
+    name: image_folder
+    patch_size: 96
+    repeat: 3
+    root: data/DIV2K_train_HR
+  val:
+    max_images: null
+    name: image_folder
+    root: data/Set14
+degradation:
+- name: bicubic_downscale
+- name: gaussian_noise
+  sigma: 15
+evaluation:
+  metrics:
+  - name: psnr
+    y_channel: true
+  - name: ssim
+    y_channel: true
+  save_samples: 1
+experiment_name: our_nn_x4_noise15_a1_skip
+loss:
+  name: l1
+model:
+  name: our_nn
+  params:
+    attention: false
+    bicubic_skip: true
+    edge_branch: false
+    n_blocks: 6
+    n_feats: 32
+    reduction: 4
+    res_scale: 0.1
+    zero_init_tail: true
+optimizer:
+  lr: 0.0002
+  name: adam
+scale: 4
+scheduler:
+  gamma: 0.5
+  name: step
+  step_size: 40
+skip_if_done: true
+training:
+  amp: false
+  epochs: 100
+  grad_clip: null
+  val_every: 5
