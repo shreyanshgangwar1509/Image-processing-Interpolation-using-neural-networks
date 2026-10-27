@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Test Jupyter\NN_project\Image-processing-Interpolation-using-neural-networks\scripts\run_app.py", line 35, in <module>
+    main()
+  File "C:\Users\Lenovo\Test Jupyter\NN_project\Image-processing-Interpolation-using-neural-networks\scripts\run_app.py", line 27, in main
+    print(f"\U0001f680 Launching Image Super-Resolution Benchmark GUI...")
+  File "C:\Program Files\Python312\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680' in position 0: character maps to <undefined>
