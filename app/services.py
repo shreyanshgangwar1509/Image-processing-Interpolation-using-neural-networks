@@ -26,12 +26,30 @@ logger = logging.getLogger("sr_project.app")
 
 
 def discover_eligible_models(repo_root: Path) -> List[Dict[str, Any]]:
-    """Scans results/ for eligible neural network model checkpoints."""
+    """Returns standard interpolation methods and eligible neural checkpoints."""
+    eligible_models = [
+        {
+            "id": f"interpolation_{model_name}_x{scale}",
+            "label": label,
+            "experiment_name": f"interpolation_{model_name}_x{scale}",
+            "model_name": model_name,
+            "type": "interpolation",
+            "scale": scale,
+            "degradation": "standard interpolation",
+            "param_count": 0,
+        }
+        for scale in (2, 4)
+        for model_name, label in (
+            ("nearest", "Nearest"),
+            ("bilinear", "Bilinear"),
+            ("bicubic", "Bicubic"),
+            ("lanczos", "Lanczos"),
+        )
+    ]
+
     results_dir = repo_root / "results"
     if not results_dir.exists():
-        return []
-
-    eligible_models = []
+        return eligible_models
 
     for exp_dir in sorted(results_dir.iterdir()):
         if not exp_dir.is_dir():
@@ -84,6 +102,7 @@ def discover_eligible_models(repo_root: Path) -> List[Dict[str, Any]]:
                     "label": m_label,
                     "experiment_name": exp_name,
                     "model_name": model_name,
+                    "type": "neural",
                     "scale": scale,
                     "degradation": degradation_tag,
                     "param_count": param_count,
