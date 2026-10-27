@@ -126,6 +126,37 @@ def amend_last_commit():
     except subprocess.CalledProcessError as e:
         print(f"Error amending commit: {e}")
 
+def abort_cherry_pick():
+    """Aborts an in-progress cherry-pick operation and restores pre-cherry-pick state."""
+    try:
+        subprocess.run(['git', 'cherry-pick', '--abort'], check=True, text=True)
+        print("\nSuccess: Cherry-pick operation aborted successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"\nError aborting cherry-pick: {e.stderr.strip() if e.stderr else e}")
+
+def cherry_pick_changes_only():
+    """Applies commit changes without committing, optionally unstaging them."""
+    commit_hash = input("\nEnter the commit hash: ").strip()
+    if not commit_hash:
+        print("Commit hash cannot be empty. Aborted.")
+        return
+
+    unstage_choice = input("Do you want to leave changes UNSTAGED in working directory? (y/N): ").strip().lower()
+
+    try:
+        # Step 1: Cherry-pick without committing (stages changes)
+        subprocess.run(['git', 'cherry-pick', '-n', commit_hash], check=True, text=True)
+        
+        # Step 2: Unstage files if requested
+        if unstage_choice == 'y':
+            subprocess.run(['git', 'restore', '--staged', '.'], check=True, text=True)
+            print(f"\nSuccess: Changes from {commit_hash} applied as UNSTAGED (no commit created).")
+        else:
+            print(f"\nSuccess: Changes from {commit_hash} applied as STAGED (no commit created).")
+            
+    except subprocess.CalledProcessError as e:
+        print(f"\nError during operation: {e.stderr.strip() if e.stderr else e}")
+
 def prompt_user_choice():
     print("=== Git Status & Commit Manager ===")
     print("1. Staged files only")
@@ -135,13 +166,15 @@ def prompt_user_choice():
     print("5. Hard delete last commit (git reset --hard HEAD~1)")
     print("6. Print recent commits (dynamic branch selection)")
     print("7. Amend last commit message (git commit --amend)")
+    print("8. Abort in-progress cherry-pick (git cherry-pick --abort)")
+    print("9. Cherry-pick changes only without committing (git cherry-pick -n)")
     
-    valid_choices = ['1', '2', '3', '4', '5', '6', '7']
+    valid_choices = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
     while True:
-        choice = input("\nEnter your choice (1-7): ").strip()
+        choice = input("\nEnter your choice (1-9): ").strip()
         if choice in valid_choices:
             return choice
-        print("Invalid choice. Please enter a number between 1 and 7.")
+        print("Invalid choice. Please enter a number between 1 and 9.")
 
 if __name__ == '__main__':
     choice = prompt_user_choice()
@@ -184,3 +217,9 @@ if __name__ == '__main__':
         
     elif choice == '7':
         amend_last_commit()
+
+    elif choice == '8':
+        abort_cherry_pick()
+
+    elif choice == '9':
+        cherry_pick_changes_only()
