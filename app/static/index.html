@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Super-Resolution Benchmark GUI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="icon">🔬</span>
+        <div>
+          <h1>Super-Resolution Benchmark</h1>
+          <p class="subtitle">Modular Image Upscaling & Quantitative Comparison Pipeline</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span id="device-chip" class="badge badge-info">Device: Checking...</span>
+        <button id="btn-about" class="btn btn-secondary">ℹ️ About Metrics</button>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="main-content">
+      <!-- Left Sidebar: Controls & Config -->
+      <aside class="sidebar">
+        <!-- 1. Image Upload Section -->
+        <section class="card">
+          <h2>1. Upload Image</h2>
+          <div id="drop-zone" class="drop-zone">
+            <input type="file" id="file-input" accept="image/png, image/jpeg, image/webp, image/bmp" class="file-input">
+            <div class="drop-prompt">
+              <span class="upload-icon">📁</span>
+              <p>Drag & Drop image here or <span class="browse-link">Browse</span></p>
+              <span class="file-hint">Supports PNG, JPEG, WebP, BMP (Max 20MB)</span>
+            </div>
+            <div id="preview-box" class="preview-box hidden">
+              <img id="img-preview" src="" alt="Upload preview">
+              <div class="file-meta">
+                <span id="meta-filename" class="meta-item">filename.png</span>
+                <span id="meta-dims" class="meta-item">0 x 0 px</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Mode & Processing Setup -->
+        <section class="card">
+          <h2>2. Mode Setup</h2>
+          <div class="form-group">
+            <label class="form-label">Upload Meaning:</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="mode" value="lr_input" checked>
+                <span>Image is LR Input</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="mode" value="hr_reference">
+                <span>Image is HR Reference</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- HR Reference Degradation Options -->
+          <div id="degradation-opts" class="degradation-opts hidden">
+            <div class="form-group">
+              <label class="form-label">Degradation Pipeline:</label>
+              <select id="select-degradation" class="form-control">
+                <option value="bicubic">Bicubic Downscale Only</option>
+                <option value="bicubic_noise">Bicubic Downscale + Gaussian Noise (σ=15)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Separate Reference Upload (Optional for LR mode) -->
+          <div id="sep-ref-opts" class="sep-ref-opts">
+            <div class="form-group">
+              <label class="form-label">Optional Ground Truth HR Reference:</label>
+              <input type="file" id="ref-file-input" accept="image/*" class="form-control file-input-sm">
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Model & Device Selection -->
+        <section class="card">
+          <h2>3. Discovered Models</h2>
+          <div class="form-group">
+            <label class="form-label">Target Device:</label>
+            <select id="select-device" class="form-control">
+              <option value="auto">Auto (CUDA if available)</option>
+              <option value="cpu">CPU</option>
+              <option value="cuda">CUDA GPU</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <div class="model-select-header">
+              <label class="form-label">Select Models:</label>
+              <button id="btn-select-all" class="btn-text">Select All</button>
+            </div>
+            <div id="models-list" class="models-list">
+              <p class="text-muted">Scanning results/ for eligible neural checkpoints...</p>
+            </div>
+          </div>
+
+          <button id="btn-run" class="btn btn-primary btn-block" disabled>
+            ⚡ Run Super-Resolution Benchmark
+          </button>
+        </section>
+      </aside>
+
+      <!-- Right Panel: Results & Comparison -->
+      <section class="results-area">
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state card">
+          <span class="empty-icon">📊</span>
+          <h3>No Benchmark Results Yet</h3>
+          <p>Upload an image, choose mode and models, and click Run to visualize super-resolution outputs and quantitative metrics.</p>
+        </div>
+
+        <!-- Active Run Progress -->
+        <div id="progress-state" class="progress-state card hidden">
+          <div class="spinner"></div>
+          <h3 id="progress-status">Running inference across selected models...</h3>
+          <p id="progress-detail">Please wait, loading checkpoints and processing tensors.</p>
+        </div>
+
+        <!-- Results Dashboard -->
+        <div id="results-dashboard" class="results-dashboard hidden">
+          <!-- Summary Bar -->
+          <div class="card summary-bar">
+            <div class="summary-item">
+              <span class="label">Input Dimensions:</span>
+              <span id="sum-dims" class="val">--</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Models Run:</span>
+              <span id="sum-count" class="val">--</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Total Time:</span>
+              <span id="sum-time" class="val">--</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Device:</span>
+              <span id="sum-device" class="val">--</span>
+            </div>
+            <div class="summary-actions">
+              <button id="btn-download-zip" class="btn btn-success">📦 Download Results (.ZIP)</button>
+              <button id="btn-reset" class="btn btn-secondary">🔄 New Image</button>
+            </div>
+          </div>
+
+          <!-- Comparison View Tools -->
+          <div class="card view-toolbar">
+            <div class="tool-group">
+              <span class="tool-label">View Mode:</span>
+              <button id="view-cards" class="btn btn-sm btn-tool active">Grid Cards</button>
+              <button id="view-slider" class="btn btn-sm btn-tool">Before / After Slider</button>
+              <button id="view-diff" class="btn btn-sm btn-tool">Difference Maps</button>
+            </div>
+            <div class="tool-group">
+              <label class="toggle-control">
+                <input type="checkbox" id="toggle-zoom">
+                <span>100% Pixel View</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Grid Cards View -->
+          <div id="view-container-cards" class="cards-grid"></div>
+
+          <!-- Slider View Container -->
+          <div id="view-container-slider" class="slider-container card hidden">
+            <div class="slider-controls">
+              <label>Compare Input/Reference with Model:</label>
+              <select id="slider-model-select" class="form-control select-inline"></select>
+            </div>
+            <div id="coco-slider" class="coco-slider">
+              <img id="slider-img-after" src="" alt="SR Output">
+              <div id="slider-before-wrapper" class="slider-before-wrapper">
+                <img id="slider-img-before" src="" alt="Before Input">
+              </div>
+              <input type="range" id="slider-range" min="0" max="100" value="50" class="slider-range">
+            </div>
+          </div>
+
+          <!-- Quantitative Metrics Table & Chart -->
+          <div class="card metrics-section">
+            <div class="metrics-header">
+              <h2>Quantitative Comparison</h2>
+              <span id="metrics-ref-badge" class="badge">Reference Required</span>
+            </div>
+            <p id="metrics-note" class="metrics-note"></p>
+
+            <div class="table-responsive">
+              <table id="metrics-table" class="metrics-table">
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Scale</th>
+                    <th>Params</th>
+                    <th>Inference Time</th>
+                    <th>PSNR (dB) ↑</th>
+                    <th>SSIM ↑</th>
+                    <th>LPIPS ↓</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <!-- Compact Bar Chart -->
+            <div class="chart-box">
+              <h3>PSNR Comparison Chart</h3>
+              <div id="psnr-chart" class="psnr-chart"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal: About Metrics -->
+    <div id="modal-about" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>About Super-Resolution Evaluation Metrics</h3>
+          <button id="btn-close-modal" class="btn-icon">&times;</button>
+        </div>
+        <div class="modal-body">
+          <h4>PSNR (Peak Signal-to-Noise Ratio)</h4>
+          <p>Measures signal power relative to reconstruction noise. Higher values (in dB) indicate smaller pixel differences. Evaluated on the 8-bit quantized ITU-R BT.601 Y-luminance channel with border cropping.</p>
+
+          <h4>SSIM (Structural Similarity Index)</h4>
+          <p>Evaluates structural similarity, luminance, and contrast preservation between SR and ground truth. Values range from 0.0 to 1.0 (higher is better).</p>
+
+          <h4>LPIPS (Learned Perceptual Image Patch Similarity)</h4>
+          <p>Measures deep feature distance using AlexNet embeddings. Lower values indicate better perceptual human alignment.</p>
+
+          <h4>Note on Objective Metrics</h4>
+          <p>PSNR and SSIM require an exact pixel-aligned High-Resolution ground-truth reference image. Higher scores reflect fidelity to the reference image but do not guarantee higher sharpness or subjective aesthetics.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
