@@ -9,5 +9,8 @@ tqdm
 pytest
 jupyter
 tabulate
+fastapi
+uvicorn
+python-multipart
 # lpips  # optional, only for the lpips metric
 # Note: On CUDA machines, install PyTorch with the CUDA build command from pytorch.org

@@ -7,19 +7,54 @@ Welcome to the Image Super-Resolution (Interpolation) Benchmark project!
 ## 1. What This Project Is
 
 This repository provides a modular, reproducible pipeline to compare image upscaling (super-resolution) methods.
-It degrades clean High-Resolution (HR) ground-truth images into Low-Resolution (LR) inputs, upscales them using classical interpolation (nearest, bilinear, bicubic, lanczos) or neural networks (SRCNN, ESPCN, EDSR-lite), and evaluates quality using quantitative metrics (PSNR, SSIM, LPIPS).
+It degrades clean High-Resolution (HR) ground-truth images into Low-Resolution (LR) inputs, upscales them using classical interpolation (nearest, bilinear, bicubic, lanczos) or neural networks (SRCNN, OurNN), and evaluates quality using quantitative metrics (PSNR, SSIM, LPIPS).
+
+It also includes a polished, interactive web interface for live demonstrations and visual model comparisons.
 
 ### Directory Structure Overview
+- `app/`: FastAPI backend and responsive HTML/CSS/JS frontend GUI.
 - `configs/`: YAML experiment configs inheriting from shared `_base_*.yaml` files.
 - `src/`: Core Python package divided into `data`, `models`, `losses`, `metrics`, `training`, `evaluation`, and `utils`.
-- `scripts/`: Executable CLI tools (`train.py`, `evaluate.py`, `run_batch.py`, `aggregate_results.py`, `make_dummy_data.py`, `check_data.py`).
+- `scripts/`: Executable CLI tools (`run_app.py`, `train.py`, `evaluate.py`, `run_batch.py`, `aggregate_results.py`, `make_dummy_data.py`, `check_data.py`).
 - `tests/`: Automated unit tests executable with `pytest`.
 - `notebooks/`: Jupyter notebooks for visual and statistical analysis of results (`results_analysis.ipynb`).
 - `data/` & `results/`: Input datasets and output logs/metrics/samples (git-managed with `.gitkeep`).
 
 ---
 
-## 2. First-Time Setup
+## 2. Web Interface (GUI) Guide
+
+### Launch Command & Local URL
+```bash
+python scripts/run_app.py --host 0.0.0.0 --port 8000
+```
+Open your browser at **http://127.0.0.1:8000**. ( for normal internet )
+for college etherent **http://{ your ip address }:8000**.
+
+### Model Discovery Rules
+The web application dynamically scans `results/` at runtime for eligible neural models. A model run is eligible only when:
+1. It contains `checkpoints/best.pth`.
+2. It contains `config_resolved.yaml` describing a single neural model.
+3. Its model architecture can be instantiated by the project's model registry.
+
+*Note:* Classical baselines (no neural weights) and smoke-test runs (`smoke_test*`) are automatically ignored. Newly added results matching these criteria appear automatically upon page refresh.
+
+### Demo Workflow
+1. **Upload**: Drag-and-drop or browse an image (PNG, JPEG, WebP, BMP).
+2. **Select Mode**:
+   - *LR Input Mode*: Treats upload as low-resolution input. Option to attach a separate ground-truth HR reference image.
+   - *HR Reference Mode*: Treats upload as clean ground-truth reference, degrades it (bicubic downscale with optional Gaussian noise), and processes the generated LR input.
+3. **Select Models & Device**: Choose discovered model checkpoints and hardware device (`auto`, `cpu`, or `cuda`).
+4. **Run Benchmark**: View real-time progress and per-model inference timing.
+5. **Interactive Comparison**:
+   - Toggle between **Grid Cards**, **Before/After Slider**, and **Difference Map** views.
+   - Toggle **100% Pixel View** for inspecting fine detail.
+   - View sortable metrics table with directional badges and PSNR bar chart.
+6. **Export Results**: Download individual SR PNGs or a single ZIP bundle containing all outputs, difference maps, `summary.json`, and `summary.csv`.
+
+---
+
+## 3. First-Time Setup
 
 ### On the Author's Machine (CPU/Development)
 #### Linux / macOS:
@@ -54,7 +89,7 @@ python -c "import torch; print('CUDA Available:', torch.cuda.is_available()); pr
 
 ---
 
-## 3. Smoke Test (Do This First, Takes <1 Minute)
+## 4. Smoke Test (Do This First, Takes <1 Minute)
 
 Run these three commands to verify everything is set up correctly:
 
@@ -73,20 +108,9 @@ python scripts/train.py --config configs/smoke_test.yaml
 pytest
 ```
 
-### What a Successful Run Looks Like
-After running the smoke test, the folder `results/smoke_test/` will be generated containing:
-- `config_resolved.yaml`: Full resolved configuration used.
-- `env.txt`: Environment diagnostic information.
-- `log.txt`: Console output logs with timestamps.
-- `train_log.csv`: Training loss and validation PSNR/SSIM history per epoch.
-- `checkpoints/`: Model state files (`last.pth` and `best.pth`).
-- `metrics.csv`: Per-image evaluation PSNR/SSIM scores and inference times.
-- `summary.json`: Aggregated mean metrics per model and dataset.
-- `samples/`: Visual comparison PNGs (`*_sr.png`, `*_hr.png`, `*_lr.png`).
-
 ---
 
-## 4. Getting the Real Datasets
+## 5. Getting the Real Datasets
 
 To run full benchmark comparisons, manually place standard HR image datasets under the `data/` directory:
 
@@ -97,19 +121,14 @@ Expected folder structure:
 - `data/BSD100/`: BSD100 test set (100 HR images).
 - `data/Urban100/`: Urban100 test set (100 HR images).
 
-### Dataset Notes:
-- Search online for dataset names (e.g., DIV2K official page at ETH Zurich, or Kaggle mirrors).
-- Ensure dataset folders contain **only** HR image files (`.png`, `.jpg`, `.jpeg`, `.bmp`).
-- **Never overlap training and test images.**
-- Verify folder contents and image dimensions using `check_data.py`:
-  ```bash
-  python scripts/check_data.py data/Set5 data/Set14 data/DIV2K_train_HR
-  ```
-- *Tip for fast development:* Override training images count with `--set data.train.max_images=100` to train on a smaller subset.
+Verify folder contents and image dimensions using `check_data.py`:
+```bash
+python scripts/check_data.py data/Set5 data/Set14 data/DIV2K_train_HR
+```
 
 ---
 
-## 5. Running Real Experiments
+## 6. Running Real Experiments
 
 ### Train or Evaluate a Single Config:
 ```bash
@@ -126,166 +145,11 @@ python scripts/train.py --config configs/srcnn_x4_clean.yaml --set training.epoc
 python scripts/run_batch.py configs/*.yaml
 ```
 
-### Evaluate a Pre-Trained Checkpoint Only:
-```bash
-python scripts/evaluate.py --config configs/srcnn_x4_clean.yaml --checkpoint results/srcnn_x4_clean/checkpoints/best.pth
-```
-
 ---
 
-## 6. The Two-Person Workflow with GitHub
-
-1. **Friend (GPU Machine)**:
-   - Pulls latest configs and code from GitHub: `git pull`
-   - Runs full experiment batch: `python scripts/run_batch.py configs/*.yaml`
-   - Commits and pushes small result summary files back:
-     ```bash
-     git add results/
-     git commit -m "Run x4 clean experiments"
-     git push
-     ```
-
-2. **Author (CPU Machine)**:
-   - Pulls updated result files: `git pull`
-   - Aggregates all benchmark summaries into consolidated tables:
-     ```bash
-     python scripts/aggregate_results.py
-     ```
-   - Opens `notebooks/results_analysis.ipynb` in Jupyter to analyze performance.
-
-### Git Tracking Rules:
-- **Tracked in Git**: Code, YAML configs, `results/*.csv`, `results/*.json`, `results/*.txt`, sample PNGs.
-- **Gitignored**: Large dataset files (`data/*`), model checkpoints (`*.pth`), virtual environment folders.
-- *Sharing Checkpoints*: Share large `.pth` checkpoint files out-of-band via Google Drive or cloud storage if necessary.
-
----
-
-## 7. Reading the Results
-
-- `results/<experiment>/metrics.csv`: Detailed evaluation metrics for every image evaluated.
-- `results/<experiment>/summary.json`: Mean metrics, parameter counts, and timing summaries.
-- `results/summary.csv`: Aggregated CSV table containing all benchmark runs across experiments.
-- `results/summary.md`: Auto-generated Markdown report formatted per dataset, sorted by PSNR.
-- `notebooks/results_analysis.ipynb`: Interactive plots, pivot tables, and visual side-by-side sample comparison.
-
----
-
-## 8. How to Extend the Project (Additions Only)
-
-The project uses self-registering components and automatic module discovery.
-**To add a new feature, you ONLY need to add a new file — NEVER edit existing code.**
-
-### 1. Add a New Model (`src/models/my_model.py`)
-```python
-import torch
-import torch.nn as nn
-from src.models.registry import MODELS
-
-@MODELS.register("my_model")
-class MyModel(nn.Module):
-    trainable: bool = True
-
-    def __init__(self, scale: int, hidden_dim: int = 64) -> None:
-        super().__init__()
-        self.scale = scale
-        self.conv = nn.Conv2d(3, 3 * scale * scale, kernel_size=3, padding=1)
-        self.ps = nn.PixelShuffle(scale)
-
-    def forward(self, lr: torch.Tensor) -> torch.Tensor:
-        return self.ps(self.conv(lr))
-```
-*YAML config line:*
-```yaml
-model:
-  name: my_model
-  params: {hidden_dim: 64}
-```
-
-### 2. Add a New Degradation Step (`src/data/my_degradation.py`)
-```python
-import torch
-from src.data.registry import DEGRADATIONS
-
-@DEGRADATIONS.register("brightness_shift")
-class BrightnessShift:
-    def __init__(self, shift: float = 0.1) -> None:
-        self.shift = shift
-
-    def describe(self) -> str:
-        return f"bright_shift_{self.shift}"
-
-    def __call__(self, img: torch.Tensor, generator=None) -> torch.Tensor:
-        return (img + self.shift).clamp(0.0, 1.0)
-```
-*YAML config line:*
-```yaml
-degradation:
-  - name: bicubic_downscale
-  - name: brightness_shift
-    shift: 0.05
-```
-
-### 3. Add a New Metric (`src/metrics/my_metric.py`)
-```python
-import torch
-from src.metrics.registry import METRICS
-
-@METRICS.register("mae_metric")
-class MAEMetric:
-    def __init__(self, y_channel: bool = True, crop_border=None) -> None:
-        pass
-
-    def __call__(self, sr: torch.Tensor, hr: torch.Tensor, scale: int) -> float:
-        return float(torch.mean(torch.abs(sr - hr)).item())
-```
-*YAML config line:*
-```yaml
-evaluation:
-  metrics:
-    - {name: mae_metric}
-```
-
-### 4. Add a New Loss (`src/losses/my_loss.py`)
-```python
-import torch
-import torch.nn as nn
-from src.losses.registry import LOSSES
-
-@LOSSES.register("smooth_l1")
-class SmoothL1LossModule(nn.Module):
-    def __init__(self, beta: float = 1.0) -> None:
-        super().__init__()
-        self.fn = nn.SmoothL1Loss(beta=beta)
-
-    def forward(self, pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-        return self.fn(pred, target)
-```
-*YAML config line:*
-```yaml
-loss: {name: smooth_l1, params: {beta: 0.5}}
-```
-
-### 5. Add a New Dataset Type (`src/data/my_dataset.py`)
-```python
-from torch.utils.data import Dataset
-from src.data.registry import DATASETS
-
-@DATASETS.register("custom_dataset")
-class CustomDataset(Dataset):
-    def __init__(self, **kwargs) -> None:
-        pass
-    def __len__(self) -> int:
-        return 0
-    def __getitem__(self, idx: int):
-        return {}
-```
-
----
-
-## 9. Troubleshooting
+## 7. Troubleshooting
 
 - **CUDA Out of Memory**: Lower `data.loader.batch_size` or `data.train.patch_size` in the YAML config or via `--set data.loader.batch_size=8`.
-- **"No images found" Errors**: Verify folder paths in your config. Use `python scripts/check_data.py <folder_path>` to confirm PNG/JPG image presence.
-- **Windows DataLoader Hangs**: Set `data.loader.num_workers: 0` in your YAML or via command line `--set data.loader.num_workers=0`.
+- **"No eligible models found" in Web UI**: Run a neural training experiment (e.g. `configs/smoke_test_our_nn.yaml` or `configs/srcnn_x4_clean.yaml`) so that `results/<experiment>/checkpoints/best.pth` and `config_resolved.yaml` exist.
 - **Metrics Not Matching Published Papers**: This pipeline quantizes SR outputs to 8-bit, converts to ITU-R BT.601 Y-channel, and crops `scale` border pixels to match standard super-resolution benchmark evaluation standards.
-- **Resuming After a Crash**: Training automatically writes progress to `train_log.csv` and saves `checkpoints/last.pth` every epoch. If a run crashes, rerun the script; use `--force` if `skip_if_done` is enabled.
+- **Optional LPIPS Metric**: If `lpips` is not installed, PSNR and SSIM will calculate normally and LPIPS will be labeled as unavailable in the UI. Install via `pip install lpips`.
