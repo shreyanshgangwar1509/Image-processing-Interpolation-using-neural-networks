@@ -251,6 +251,17 @@ body {
   gap: 0.5rem;
 }
 
+.model-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.model-group-title {
+  font-size: 0.75rem;
+  color: var(--accent-blue);
+}
+
 .model-chip {
   display: flex;
   align-items: flex-start;

@@ -88,30 +88,82 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     modelsList.innerHTML = "";
-    discoveredModels.forEach((m) => {
-      const chip = document.createElement("label");
-      chip.className = "model-chip";
-      chip.innerHTML = `
-        <input type="checkbox" value="${m.id}" checked>
-        <div class="chip-info">
-          <span class="chip-title">${m.label}</span>
-          <span class="chip-sub">Scale: x${m.scale} | Degradation: ${m.degradation} | Params: ${(m.param_count / 1000).toFixed(1)}k</span>
-        </div>
-      `;
-      modelsList.appendChild(chip);
-    });
+    const interpolationModels = discoveredModels.filter(
+      (model) => model.type === "interpolation"
+    );
+    const neuralModels = discoveredModels.filter(
+      (model) => model.type !== "interpolation"
+    );
+
+    function renderGroup(title, models) {
+      if (models.length === 0) return;
+
+      const group = document.createElement("div");
+      group.className = "model-group";
+      const heading = document.createElement("h3");
+      heading.className = "model-group-title";
+      heading.textContent = title;
+      group.appendChild(heading);
+
+      models.forEach((m) => {
+        const chip = document.createElement("label");
+        chip.className = "model-chip";
+        if (m.type === "interpolation") {
+          chip.dataset.interpolation = "true";
+        }
+        chip.innerHTML = `
+          <input type="checkbox" value="${m.id}" checked>
+          <div class="chip-info">
+            <span class="chip-title">${m.label}</span>
+            <span class="chip-sub">Scale: x${m.scale} | Degradation: ${m.degradation} | Params: ${(m.param_count / 1000).toFixed(1)}k</span>
+          </div>
+        `;
+        group.appendChild(chip);
+      });
+
+      modelsList.appendChild(group);
+    }
+
+    renderGroup("Standard interpolation", interpolationModels);
+    renderGroup("Neural checkpoints", neuralModels);
+    if (neuralModels.length === 0) {
+      const hint = document.createElement("p");
+      hint.className = "text-muted";
+      hint.textContent =
+        "No neural checkpoints found. Standard interpolation methods are ready to use.";
+      modelsList.appendChild(hint);
+    }
+
+    updateInterpolationAvailability();
 
     updateRunButtonState();
   }
 
+  function updateInterpolationAvailability() {
+    const isHrReference = document.querySelector(
+      'input[name="mode"]:checked'
+    ).value === "hr_reference";
+
+    modelsList.querySelectorAll("[data-interpolation='true']").forEach((chip) => {
+      const checkbox = chip.querySelector("input[type='checkbox']");
+      chip.hidden = isHrReference;
+      checkbox.disabled = isHrReference;
+      if (isHrReference) checkbox.checked = false;
+    });
+  }
+
   function updateRunButtonState() {
-    const selected = modelsList.querySelectorAll("input[type='checkbox']:checked");
+    const selected = modelsList.querySelectorAll(
+      "input[type='checkbox']:checked:not(:disabled)"
+    );
     btnRun.disabled = !(currentFile && selected.length > 0);
   }
 
   btnSelectAll.addEventListener("click", (e) => {
     e.preventDefault();
-    const checkboxes = modelsList.querySelectorAll("input[type='checkbox']");
+    const checkboxes = modelsList.querySelectorAll(
+      "input[type='checkbox']:not(:disabled)"
+    );
     const allChecked = Array.from(checkboxes).every((cb) => cb.checked);
     checkboxes.forEach((cb) => (cb.checked = !allChecked));
     updateRunButtonState();
@@ -176,6 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
         degradationOpts.classList.add("hidden");
         sepRefOpts.classList.remove("hidden");
       }
+      updateInterpolationAvailability();
+      updateRunButtonState();
     });
   });
 
@@ -188,7 +242,9 @@ document.addEventListener("DOMContentLoaded", () => {
   btnRun.addEventListener("click", async () => {
     if (!currentFile) return;
 
-    const selectedCheckboxes = modelsList.querySelectorAll("input[type='checkbox']:checked");
+    const selectedCheckboxes = modelsList.querySelectorAll(
+      "input[type='checkbox']:checked:not(:disabled)"
+    );
     const selectedModelIds = Array.from(selectedCheckboxes).map((cb) => cb.value);
 
     if (selectedModelIds.length === 0) {

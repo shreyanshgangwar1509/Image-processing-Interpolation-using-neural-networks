@@ -25,6 +25,7 @@ from app.services import (
     pil_to_tensor,
     tensor_to_pil,
 )
+from src.models import MODELS
 from src.utils.device import get_device
 
 logger = logging.getLogger("sr_project.app")
@@ -129,6 +130,13 @@ async def run_inference(
         raise HTTPException(
             status_code=400, detail=f"Requested models not eligible or found: {missing_ids}"
         )
+    if mode == "hr_reference" and any(
+        all_eligible[mid]["type"] == "interpolation" for mid in model_ids
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Standard interpolation methods are available only in LR input mode.",
+        )
 
     # 1. Read input image
     input_bytes = await file.read()
@@ -182,7 +190,13 @@ async def run_inference(
         scale = minfo["scale"]
 
         try:
-            model = load_model_from_checkpoint(minfo, device=device, repo_root=REPO_ROOT)
+            if minfo["type"] == "interpolation":
+                model = MODELS.build(minfo["model_name"], scale=scale).to(device)
+                model.eval()
+            else:
+                model = load_model_from_checkpoint(
+                    minfo, device=device, repo_root=REPO_ROOT
+                )
 
             if device.type == "cuda":
                 torch.cuda.synchronize()
