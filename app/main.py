@@ -108,7 +108,7 @@ def _pil_to_base64_data_uri(pil_img: Image.Image, format_str: str = "PNG") -> st
 
 
 @app.post("/api/run")
-async def run_inference(
+def run_inference(
     file: UploadFile = File(...),
     mode: str = Form("lr_input"),  # 'lr_input' | 'hr_reference'
     selected_models: str = Form(...),  # Comma-separated model IDs
@@ -138,15 +138,15 @@ async def run_inference(
             detail="Standard interpolation methods are available only in LR input mode.",
         )
 
-    # 1. Read input image
-    input_bytes = await file.read()
+    # 1. Read input image (synchronously in threadpool)
+    input_bytes = file.file.read()
     input_pil = _process_image_upload(input_bytes, file.filename)
     orig_w, orig_h = input_pil.size
 
     # Check separate HR reference upload if supplied in LR mode
     sep_hr_pil: Optional[Image.Image] = None
     if mode == "lr_input" and ref_file is not None and ref_file.filename:
-        ref_bytes = await ref_file.read()
+        ref_bytes = ref_file.file.read()
         if len(ref_bytes) > 0:
             sep_hr_pil = _process_image_upload(ref_bytes, ref_file.filename)
 

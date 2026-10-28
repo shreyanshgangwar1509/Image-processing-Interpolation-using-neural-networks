@@ -11,6 +11,10 @@
     <!-- Header -->
     <header class="app-header">
       <div class="logo-area">
+        <button id="btn-toggle-sidebar" class="btn-sidebar-toggle" title="Hide Controls Sidebar">
+          <span class="toggle-icon">☰</span>
+          <span class="toggle-text">Controls</span>
+        </button>
         <span class="icon">🔬</span>
         <div>
           <h1>Super-Resolution Benchmark</h1>
@@ -26,10 +30,14 @@
     <!-- Main Grid -->
     <main class="main-content">
       <!-- Left Sidebar: Controls & Config -->
-      <aside class="sidebar">
-        <!-- 1. Image Upload Section -->
-        <section class="card">
-          <h2>1. Upload Image</h2>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+          <!-- 1. Image Upload Section -->
+          <section class="card">
+            <div class="sidebar-card-header">
+              <h2>1. Upload Image</h2>
+              <button id="btn-collapse-sidebar-inner" class="btn-text btn-sidebar-close" title="Hide controls sidebar">◂ Hide</button>
+            </div>
           <div id="drop-zone" class="drop-zone">
             <input type="file" id="file-input" accept="image/png, image/jpeg, image/webp, image/bmp" class="file-input">
             <div class="drop-prompt">
@@ -110,6 +118,7 @@
             ⚡ Run Super-Resolution Benchmark
           </button>
         </section>
+        </div> <!-- /.sidebar-inner -->
       </aside>
 
       <!-- Right Panel: Results & Comparison -->
@@ -157,16 +166,16 @@
           <!-- Comparison View Tools -->
           <div class="card view-toolbar">
             <div class="tool-group">
-              <span class="tool-label">View Mode:</span>
+              <span class="tool-label">View:</span>
               <button id="view-cards" class="btn btn-sm btn-tool active">Grid Cards</button>
               <button id="view-slider" class="btn btn-sm btn-tool">Before / After Slider</button>
               <button id="view-diff" class="btn btn-sm btn-tool">Difference Maps</button>
             </div>
-            <div class="tool-group">
-              <label class="toggle-control">
-                <input type="checkbox" id="toggle-zoom">
-                <span>100% Pixel View</span>
-              </label>
+            <div class="tool-group grid-layout-group" id="grid-layout-group">
+              <span class="tool-label">Columns:</span>
+              <button id="btn-layout-auto" class="btn btn-sm btn-tool active" title="Auto Responsive Grid">Auto</button>
+              <button id="btn-layout-2col" class="btn btn-sm btn-tool" title="2 Columns Side by Side">2 Col</button>
+              <button id="btn-layout-1col" class="btn btn-sm btn-tool" title="1 Column Wide">1 Col</button>
             </div>
           </div>
 
@@ -175,16 +184,45 @@
 
           <!-- Slider View Container -->
           <div id="view-container-slider" class="slider-container card hidden">
-            <div class="slider-controls">
-              <label>Compare Input/Reference with Model:</label>
-              <select id="slider-model-select" class="form-control select-inline"></select>
-            </div>
-            <div id="coco-slider" class="coco-slider">
-              <img id="slider-img-after" src="" alt="SR Output">
-              <div id="slider-before-wrapper" class="slider-before-wrapper">
-                <img id="slider-img-before" src="" alt="Before Input">
+            <div class="slider-toolbar">
+              <div class="slider-toolbar-group">
+                <label for="slider-model-select" class="tool-label">Compare With:</label>
+                <select id="slider-model-select" class="form-control select-inline"></select>
               </div>
-              <input type="range" id="slider-range" min="0" max="100" value="50" class="slider-range">
+              <div class="slider-toolbar-group slider-presets" role="group" aria-label="Slider split presets">
+                <span class="tool-label">Preset:</span>
+                <button type="button" class="btn btn-sm btn-tool btn-slider-preset" data-pos="0">Before (0%)</button>
+                <button type="button" class="btn btn-sm btn-tool btn-slider-preset active" data-pos="50">Split (50%)</button>
+                <button type="button" class="btn btn-sm btn-tool btn-slider-preset" data-pos="100">After (100%)</button>
+              </div>
+              <div class="slider-toolbar-group slider-control-group">
+                <label for="slider-range" class="tool-label">Divider:</label>
+                <input type="range" id="slider-range" min="0" max="100" value="50" class="slider-range-input" aria-label="Before/after split slider">
+                <span id="slider-pct-label" class="badge slider-pct-badge">50%</span>
+              </div>
+            </div>
+
+            <div id="coco-slider" class="coco-slider" tabindex="0" role="slider" aria-label="Before and after image comparison slider. Drag horizontally or use arrow keys." aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+              <img id="slider-img-after" src="" alt="Enhanced Super-Resolution Output">
+              <div id="slider-before-wrapper" class="slider-before-wrapper">
+                <img id="slider-img-before" src="" alt="Original Input or Reference">
+              </div>
+              <div id="slider-divider" class="slider-divider">
+                <div id="slider-handle" class="slider-handle" title="Drag horizontally to compare before and after">
+                  <span class="handle-arrow">◀</span>
+                  <span class="handle-line"></span>
+                  <span class="handle-arrow">▶</span>
+                </div>
+              </div>
+              <div class="slider-tag slider-tag-before">
+                <span class="slider-tag-dot tag-dot-before"></span>
+                <span id="slider-badge-before-text">Before (Input)</span>
+              </div>
+              <div class="slider-tag slider-tag-after">
+                <span id="slider-badge-after-text">After (Enhanced)</span>
+                <span class="slider-tag-dot tag-dot-after"></span>
+              </div>
+              <div class="slider-drag-hint" id="slider-drag-hint">Drag across image or handle to compare</div>
             </div>
           </div>
 
@@ -242,6 +280,44 @@
 
           <h4>Note on Objective Metrics</h4>
           <p>PSNR and SSIM require an exact pixel-aligned High-Resolution ground-truth reference image. Higher scores reflect fidelity to the reference image but do not guarantee higher sharpness or subjective aesthetics.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Full-Screen Image Inspector (Zoom & Pan) -->
+    <div id="modal-inspector" class="modal-overlay hidden">
+      <div class="inspector-card">
+        <div class="inspector-header">
+          <div class="inspector-title-area">
+            <h3 id="inspector-model-title">Model Name</h3>
+            <span id="inspector-scale-badge" class="badge badge-info">x4</span>
+            <span id="inspector-dims-badge" class="badge">0 x 0 px</span>
+          </div>
+          <div class="inspector-model-switcher" id="inspector-model-switcher">
+            <!-- Dynamic model pills inserted by JS -->
+          </div>
+          <div class="inspector-header-actions">
+            <a id="btn-inspector-download" href="#" download="sr_zoom.png" class="btn btn-sm btn-secondary" title="Download Full Resolution PNG">📥 Download</a>
+            <button id="btn-close-inspector" class="btn-icon" title="Close (Esc)">&times;</button>
+          </div>
+        </div>
+
+        <div id="inspector-viewport" class="inspector-viewport">
+          <div id="inspector-canvas" class="inspector-canvas">
+            <img id="inspector-img" src="" alt="Inspected Model Output">
+          </div>
+          <!-- Floating Inspection HUD -->
+          <div class="inspector-hud">
+            <button id="btn-zoom-out" class="hud-btn" title="Zoom Out (−)">−</button>
+            <span id="hud-zoom-level" class="hud-label">100%</span>
+            <button id="btn-zoom-in" class="hud-btn" title="Zoom In (+)">+</button>
+            <div class="hud-divider"></div>
+            <button id="btn-zoom-100" class="hud-btn hud-btn-text" title="100% 1:1 Pixel Scale">1:1</button>
+            <button id="btn-zoom-fit" class="hud-btn hud-btn-text" title="Fit to Screen">Fit</button>
+            <button id="btn-toggle-pixelated" class="hud-btn hud-btn-text" title="Toggle Nearest Pixelated Rendering">Pixelated</button>
+            <div class="hud-divider"></div>
+            <span class="hud-hint">Scroll to zoom · Drag to pan · Arrow keys switch models · Esc to close</span>
+          </div>
         </div>
       </div>
     </div>

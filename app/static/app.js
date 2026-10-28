@@ -43,15 +43,46 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnViewCards = document.getElementById("view-cards");
   const btnViewSlider = document.getElementById("view-slider");
   const btnViewDiff = document.getElementById("view-diff");
-  const toggleZoom = document.getElementById("toggle-zoom");
+
+  const btnToggleSidebar = document.getElementById("btn-toggle-sidebar");
+  const mainContent = document.querySelector(".main-content");
+
+  const btnLayoutAuto = document.getElementById("btn-layout-auto");
+  const btnLayout2col = document.getElementById("btn-layout-2col");
+  const btnLayout1col = document.getElementById("btn-layout-1col");
+
+  const modalInspector = document.getElementById("modal-inspector");
+  const inspectorModelTitle = document.getElementById("inspector-model-title");
+  const inspectorScaleBadge = document.getElementById("inspector-scale-badge");
+  const inspectorDimsBadge = document.getElementById("inspector-dims-badge");
+  const inspectorModelSwitcher = document.getElementById("inspector-model-switcher");
+  const btnInspectorDownload = document.getElementById("btn-inspector-download");
+  const btnCloseInspector = document.getElementById("btn-close-inspector");
+  const inspectorViewport = document.getElementById("inspector-viewport");
+  const inspectorCanvas = document.getElementById("inspector-canvas");
+  const inspectorImg = document.getElementById("inspector-img");
+  const btnZoomOut = document.getElementById("btn-zoom-out");
+  const btnZoomIn = document.getElementById("btn-zoom-in");
+  const hudZoomLevel = document.getElementById("hud-zoom-level");
+  const btnZoom100 = document.getElementById("btn-zoom-100");
+  const btnZoomFit = document.getElementById("btn-zoom-fit");
+  const btnTogglePixelated = document.getElementById("btn-toggle-pixelated");
 
   const viewCardsContainer = document.getElementById("view-container-cards");
   const viewSliderContainer = document.getElementById("view-container-slider");
+  const cocoSlider = document.getElementById("coco-slider");
+  const sliderDivider = document.getElementById("slider-divider");
+  const sliderHandle = document.getElementById("slider-handle");
   const sliderModelSelect = document.getElementById("slider-model-select");
   const sliderImgBefore = document.getElementById("slider-img-before");
   const sliderImgAfter = document.getElementById("slider-img-after");
   const sliderBeforeWrapper = document.getElementById("slider-before-wrapper");
   const sliderRange = document.getElementById("slider-range");
+  const sliderPctLabel = document.getElementById("slider-pct-label");
+  const sliderBadgeBeforeText = document.getElementById("slider-badge-before-text");
+  const sliderBadgeAfterText = document.getElementById("slider-badge-after-text");
+  const sliderPresetButtons = document.querySelectorAll(".btn-slider-preset");
+  const sliderDragHint = document.getElementById("slider-drag-hint");
 
   const metricsTableBody = document.querySelector("#metrics-table tbody");
   const psnrChart = document.getElementById("psnr-chart");
@@ -327,13 +358,17 @@ document.addEventListener("DOMContentLoaded", () => {
         <span>${data.mode === "hr_reference" ? "Degraded LR Input" : "Uploaded LR Input"}</span>
         <span class="badge">${data.input_width}x${data.input_height}</span>
       </div>
-      <div class="result-img-box">
+      <div class="result-img-box" title="Click to open interactive zoom & pan inspector">
         <img src="${data.lr_b64}" alt="Input image">
       </div>
       <div class="result-card-footer">
         <span>Input Resolution: ${data.input_width}x${data.input_height} px</span>
       </div>
     `;
+    const inputImgBox = inputCard.querySelector(".result-img-box");
+    if (inputImgBox) {
+      inputImgBox.addEventListener("click", () => openInspector("input"));
+    }
     viewCardsContainer.appendChild(inputCard);
 
     // Model Result Cards
@@ -360,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <span>${res.model_label} (x${res.scale})</span>
             <span class="badge badge-info">${res.width}x${res.height}</span>
           </div>
-          <div class="result-img-box">
+          <div class="result-img-box" title="Click to open interactive zoom & pan inspector">
             <img src="${imgSrc}" alt="${res.model_label}">
           </div>
           <div class="result-card-footer">
@@ -369,9 +404,13 @@ document.addEventListener("DOMContentLoaded", () => {
               ${m.psnr ? `<span class="m-chip">PSNR: ${m.psnr.toFixed(2)}dB</span>` : ""}
               ${m.ssim ? `<span class="m-chip">SSIM: ${m.ssim.toFixed(4)}</span>` : ""}
             </div>
-            <a href="${res.sr_b64}" download="${res.model_label}_sr.png" class="btn-text" style="align-self: flex-end; margin-top: 0.2rem;">📥 Download PNG</a>
+            <a href="${res.sr_b64}" download="${res.model_label}_sr.png" class="btn-text btn-download-card" title="Download Full Resolution PNG">📥 Download PNG</a>
           </div>
         `;
+        const resultImgBox = card.querySelector(".result-img-box");
+        if (resultImgBox) {
+          resultImgBox.addEventListener("click", () => openInspector(res.model_name));
+        }
       }
 
       viewCardsContainer.appendChild(card);
@@ -392,21 +431,131 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     sliderImgBefore.src = data.hr_b64 || data.lr_b64;
+    if (sliderBadgeBeforeText) {
+      sliderBadgeBeforeText.textContent = data.hr_b64 ? "Before (Ground Truth)" : "Before (Input LR)";
+    }
 
     function updateSliderImages() {
       const selIdx = parseInt(sliderModelSelect.value) || 0;
       const res = validResults[selIdx];
       if (res) {
         sliderImgAfter.src = res.sr_b64;
+        if (sliderBadgeAfterText) {
+          sliderBadgeAfterText.textContent = `After: ${res.model_label} (x${res.scale})`;
+        }
       }
     }
 
     sliderModelSelect.onchange = updateSliderImages;
     updateSliderImages();
 
-    sliderRange.oninput = (e) => {
-      sliderBeforeWrapper.style.width = `${e.target.value}%`;
-    };
+    let currentPct = 50;
+
+    function updateSliderPosition(pct, syncRangeInput = true) {
+      currentPct = Math.max(0, Math.min(100, pct));
+      if (cocoSlider) {
+        cocoSlider.style.setProperty("--slider-pos", `${currentPct}%`);
+        cocoSlider.setAttribute("aria-valuenow", Math.round(currentPct));
+      }
+      if (sliderBeforeWrapper) {
+        sliderBeforeWrapper.style.clipPath = `inset(0 ${100 - currentPct}% 0 0)`;
+      }
+      if (sliderDivider) {
+        sliderDivider.style.left = `${currentPct}%`;
+      }
+      if (syncRangeInput && sliderRange) {
+        sliderRange.value = Math.round(currentPct);
+      }
+      if (sliderPctLabel) {
+        sliderPctLabel.textContent = `${Math.round(currentPct)}%`;
+      }
+      const rounded = Math.round(currentPct);
+      sliderPresetButtons.forEach((btn) => {
+        const targetPos = parseInt(btn.dataset.pos, 10);
+        btn.classList.toggle("active", targetPos === rounded);
+      });
+    }
+
+    // Connect Range Input
+    if (sliderRange) {
+      sliderRange.oninput = (e) => {
+        updateSliderPosition(parseFloat(e.target.value), false);
+      };
+    }
+
+    // Connect Presets
+    sliderPresetButtons.forEach((btn) => {
+      btn.onclick = () => {
+        const targetPos = parseInt(btn.dataset.pos, 10);
+        updateSliderPosition(targetPos, true);
+      };
+    });
+
+    // Connect Dragging directly on image and handle
+    if (cocoSlider) {
+      let isDragging = false;
+
+      function getPosFromPointer(e) {
+        const rect = cocoSlider.getBoundingClientRect();
+        if (rect.width <= 0) return 50;
+        const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+        const offsetX = clientX - rect.left;
+        return Math.max(0, Math.min(100, (offsetX / rect.width) * 100));
+      }
+
+      function onPointerDown(e) {
+        if (e.button !== undefined && e.button !== 0) return;
+        isDragging = true;
+        cocoSlider.classList.add("is-dragging");
+        cocoSlider.classList.add("hint-hidden");
+        try {
+          cocoSlider.setPointerCapture(e.pointerId);
+        } catch (_) {}
+        const pct = getPosFromPointer(e);
+        updateSliderPosition(pct, true);
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const pct = getPosFromPointer(e);
+        updateSliderPosition(pct, true);
+      }
+
+      function onPointerUp(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        cocoSlider.classList.remove("is-dragging");
+        try {
+          cocoSlider.releasePointerCapture(e.pointerId);
+        } catch (_) {}
+      }
+
+      cocoSlider.onpointerdown = onPointerDown;
+      cocoSlider.onpointermove = onPointerMove;
+      cocoSlider.onpointerup = onPointerUp;
+      cocoSlider.onpointercancel = onPointerUp;
+
+      // Accessible keyboard control on slider
+      cocoSlider.onkeydown = (e) => {
+        const step = e.shiftKey ? 10 : 2;
+        if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+          e.preventDefault();
+          updateSliderPosition(currentPct - step, true);
+        } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+          e.preventDefault();
+          updateSliderPosition(currentPct + step, true);
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          updateSliderPosition(0, true);
+        } else if (e.key === "End") {
+          e.preventDefault();
+          updateSliderPosition(100, true);
+        }
+      };
+    }
+
+    // Initialize to 50%
+    updateSliderPosition(50, true);
   }
 
   function renderMetricsTableAndChart(data) {
@@ -469,7 +618,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 6. View Mode Toggles
+  // 6. View Mode Toggles & Column Density
   btnViewCards.addEventListener("click", () => setViewMode("cards"));
   btnViewSlider.addEventListener("click", () => setViewMode("slider"));
   btnViewDiff.addEventListener("click", () => setViewMode("diff"));
@@ -487,6 +636,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btnViewSlider.classList.add("active");
       viewCardsContainer.classList.add("hidden");
       viewSliderContainer.classList.remove("hidden");
+      if (currentRunResults) renderSliderView(currentRunResults);
     } else if (mode === "diff") {
       btnViewDiff.classList.add("active");
       viewCardsContainer.classList.remove("hidden");
@@ -495,12 +645,404 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  toggleZoom.addEventListener("change", (e) => {
-    if (e.target.checked) viewCardsContainer.classList.add("zoom-100");
-    else viewCardsContainer.classList.remove("zoom-100");
+  // Sidebar Collapse & Expand Logic
+  const sidebar = document.getElementById("sidebar");
+  const btnCollapseSidebarInner = document.getElementById("btn-collapse-sidebar-inner");
+
+  function setSidebarCollapsed(collapse) {
+    if (!mainContent || !sidebar) return;
+
+    if (collapse) {
+      mainContent.classList.add("sidebar-collapsed");
+      if (btnToggleSidebar) {
+        btnToggleSidebar.classList.add("collapsed-state");
+        btnToggleSidebar.title = "Show Controls Sidebar";
+        const iconSpan = btnToggleSidebar.querySelector(".toggle-icon");
+        const textSpan = btnToggleSidebar.querySelector(".toggle-text");
+        if (iconSpan) iconSpan.textContent = "▸";
+        if (textSpan) textSpan.textContent = "Show Controls";
+      }
+      // Guarantee complete hiding at end of animation
+      setTimeout(() => {
+        if (mainContent.classList.contains("sidebar-collapsed")) {
+          sidebar.classList.add("is-completely-hidden");
+        }
+      }, 260);
+    } else {
+      sidebar.classList.remove("is-completely-hidden");
+      void sidebar.offsetWidth; // Force layout reflow
+      mainContent.classList.remove("sidebar-collapsed");
+      if (btnToggleSidebar) {
+        btnToggleSidebar.classList.remove("collapsed-state");
+        btnToggleSidebar.title = "Hide Controls Sidebar";
+        const iconSpan = btnToggleSidebar.querySelector(".toggle-icon");
+        const textSpan = btnToggleSidebar.querySelector(".toggle-text");
+        if (iconSpan) iconSpan.textContent = "☰";
+        if (textSpan) textSpan.textContent = "Controls";
+      }
+    }
+  }
+
+  if (sidebar) {
+    sidebar.addEventListener("transitionend", (e) => {
+      if (e.target === sidebar && e.propertyName === "width") {
+        if (mainContent.classList.contains("sidebar-collapsed")) {
+          sidebar.classList.add("is-completely-hidden");
+        }
+      }
+    });
+  }
+
+  if (btnToggleSidebar && mainContent) {
+    btnToggleSidebar.addEventListener("click", () => {
+      const isCurrentlyCollapsed = mainContent.classList.contains("sidebar-collapsed");
+      setSidebarCollapsed(!isCurrentlyCollapsed);
+    });
+  }
+
+  if (btnCollapseSidebarInner) {
+    btnCollapseSidebarInner.addEventListener("click", () => {
+      setSidebarCollapsed(true);
+    });
+  }
+
+  // Column Density Toggles
+  function setLayoutMode(mode) {
+    [btnLayoutAuto, btnLayout2col, btnLayout1col].forEach((b) => b && b.classList.remove("active"));
+    viewCardsContainer.classList.remove("layout-2col", "layout-1col");
+
+    if (mode === "2col") {
+      if (btnLayout2col) btnLayout2col.classList.add("active");
+      viewCardsContainer.classList.add("layout-2col");
+    } else if (mode === "1col") {
+      if (btnLayout1col) btnLayout1col.classList.add("active");
+      viewCardsContainer.classList.add("layout-1col");
+    } else {
+      if (btnLayoutAuto) btnLayoutAuto.classList.add("active");
+    }
+  }
+
+  if (btnLayoutAuto) btnLayoutAuto.addEventListener("click", () => setLayoutMode("auto"));
+  if (btnLayout2col) btnLayout2col.addEventListener("click", () => setLayoutMode("2col"));
+  if (btnLayout1col) btnLayout1col.addEventListener("click", () => setLayoutMode("1col"));
+
+  // 7. Full-Screen Image Inspector (Zoom & Pan)
+  let isInspectorOpen = false;
+  let inspectorItems = [];
+  let currentInspectorIdx = 0;
+  let zoomLevel = 1.0;
+  let panX = 0;
+  let panY = 0;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let isPixelated = false;
+
+  function updateInspectorTransform() {
+    inspectorCanvas.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+    hudZoomLevel.textContent = `${Math.round(zoomLevel * 100)}%`;
+  }
+
+  function zoomToFit() {
+    const vpW = inspectorViewport.clientWidth || 800;
+    const vpH = inspectorViewport.clientHeight || 600;
+    const imgW = inspectorImg.naturalWidth || inspectorItems[currentInspectorIdx]?.width || 512;
+    const imgH = inspectorImg.naturalHeight || inspectorItems[currentInspectorIdx]?.height || 512;
+
+    const pad = 64;
+    const scaleX = (vpW - pad) / imgW;
+    const scaleY = (vpH - pad) / imgH;
+    zoomLevel = Math.max(0.1, Math.min(Math.min(scaleX, scaleY), 2.0));
+    panX = Math.round((vpW - imgW * zoomLevel) / 2);
+    panY = Math.round((vpH - imgH * zoomLevel) / 2);
+    updateInspectorTransform();
+  }
+
+  function zoomTo100() {
+    const vpW = inspectorViewport.clientWidth || 800;
+    const vpH = inspectorViewport.clientHeight || 600;
+    const imgW = inspectorImg.naturalWidth || inspectorItems[currentInspectorIdx]?.width || 512;
+    const imgH = inspectorImg.naturalHeight || inspectorItems[currentInspectorIdx]?.height || 512;
+
+    zoomLevel = 1.0;
+    panX = Math.round((vpW - imgW) / 2);
+    panY = Math.round((vpH - imgH) / 2);
+    updateInspectorTransform();
+  }
+
+  function zoomBy(factor, clientX, clientY) {
+    const rect = inspectorViewport.getBoundingClientRect();
+    const mouseX = clientX !== undefined ? clientX - rect.left : rect.width / 2;
+    const mouseY = clientY !== undefined ? clientY - rect.top : rect.height / 2;
+
+    const newZoom = Math.max(0.1, Math.min(32.0, zoomLevel * factor));
+    if (newZoom === zoomLevel) return;
+
+    panX = mouseX - ((mouseX - panX) / zoomLevel) * newZoom;
+    panY = mouseY - ((mouseY - panY) / zoomLevel) * newZoom;
+    zoomLevel = newZoom;
+    updateInspectorTransform();
+  }
+
+  function selectInspectorModel(idx, keepTransform = true) {
+    if (idx < 0 || idx >= inspectorItems.length) return;
+    currentInspectorIdx = idx;
+    const item = inspectorItems[idx];
+
+    inspectorModelTitle.textContent = item.label;
+    inspectorScaleBadge.textContent = item.scale ? `x${item.scale}` : "Input";
+    inspectorScaleBadge.className = item.isInput ? "badge" : "badge badge-info";
+    inspectorDimsBadge.textContent = `${item.width} x ${item.height} px`;
+
+    btnInspectorDownload.href = item.src;
+    btnInspectorDownload.download = `${item.label.toLowerCase().replace(/[^a-z0-9]/g, "_")}_inspect.png`;
+
+    inspectorModelSwitcher.querySelectorAll(".switcher-pill").forEach((pill, pIdx) => {
+      pill.classList.toggle("active", pIdx === idx);
+    });
+
+    inspectorImg.src = item.src;
+
+    if (!keepTransform) {
+      if (inspectorImg.complete && inspectorImg.naturalWidth) {
+        zoomToFit();
+      } else {
+        inspectorImg.onload = () => {
+          zoomToFit();
+          inspectorImg.onload = null;
+        };
+      }
+    } else {
+      updateInspectorTransform();
+    }
+  }
+
+  function openInspector(targetKey) {
+    if (!currentRunResults) return;
+
+    inspectorItems = [];
+
+    // Input image
+    inspectorItems.push({
+      id: "input",
+      label: currentRunResults.mode === "hr_reference" ? "Degraded LR Input" : "Uploaded LR Input",
+      src: currentRunResults.lr_b64,
+      width: currentRunResults.input_width,
+      height: currentRunResults.input_height,
+      scale: 1,
+      isInput: true,
+    });
+
+    // Ground Truth Reference if available
+    if (currentRunResults.hr_b64) {
+      inspectorItems.push({
+        id: "ground_truth",
+        label: "Ground Truth Reference (HR)",
+        src: currentRunResults.hr_b64,
+        width: currentRunResults.results[0]?.width || currentRunResults.input_width * 4,
+        height: currentRunResults.results[0]?.height || currentRunResults.input_height * 4,
+        scale: currentRunResults.results[0]?.scale || 4,
+        isInput: false,
+      });
+    }
+
+    // Model result items
+    currentRunResults.results.forEach((r) => {
+      if (!r.error) {
+        const src = (activeViewMode === "diff" && r.diff_b64) ? r.diff_b64 : r.sr_b64;
+        inspectorItems.push({
+          id: r.model_name,
+          label: activeViewMode === "diff" ? `${r.model_label} (Diff)` : r.model_label,
+          src: src,
+          width: r.width,
+          height: r.height,
+          scale: r.scale,
+          isInput: false,
+        });
+      }
+    });
+
+    if (inspectorItems.length === 0) return;
+
+    inspectorModelSwitcher.innerHTML = "";
+    inspectorItems.forEach((item, idx) => {
+      const pill = document.createElement("button");
+      pill.type = "button";
+      pill.className = "switcher-pill";
+      pill.innerHTML = `<span>${item.label}</span>${item.scale > 1 ? `<small style="opacity:0.7">x${item.scale}</small>` : ""}`;
+      pill.addEventListener("click", () => selectInspectorModel(idx, true));
+      inspectorModelSwitcher.appendChild(pill);
+    });
+
+    let startIdx = 0;
+    if (typeof targetKey === "number") {
+      startIdx = Math.max(0, Math.min(targetKey, inspectorItems.length - 1));
+    } else if (typeof targetKey === "string") {
+      const found = inspectorItems.findIndex((it) => it.id === targetKey);
+      if (found !== -1) startIdx = found;
+    }
+
+    modalInspector.classList.remove("hidden");
+    isInspectorOpen = true;
+
+    selectInspectorModel(startIdx, false);
+  }
+
+  function closeInspector() {
+    modalInspector.classList.add("hidden");
+    isInspectorOpen = false;
+  }
+
+  btnCloseInspector.addEventListener("click", closeInspector);
+  modalInspector.addEventListener("click", (e) => {
+    if (e.target === modalInspector) closeInspector();
   });
 
-  // 7. Reset & Modal
+  // Mouse pan handlers
+  inspectorViewport.addEventListener("mousedown", (e) => {
+    if (e.button !== 0) return;
+    isDragging = true;
+    dragStartX = e.clientX - panX;
+    dragStartY = e.clientY - panY;
+    inspectorViewport.classList.add("is-dragging");
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    panX = e.clientX - dragStartX;
+    panY = e.clientY - dragStartY;
+    updateInspectorTransform();
+  });
+
+  window.addEventListener("mouseup", () => {
+    if (isDragging) {
+      isDragging = false;
+      inspectorViewport.classList.remove("is-dragging");
+    }
+  });
+
+  // Wheel event handler: Handles trackpad pinch-to-zoom, trackpad two-finger panning, and notched mouse wheel
+  inspectorViewport.addEventListener("wheel", (e) => {
+    e.preventDefault();
+
+    if (e.ctrlKey) {
+      // 1. Touchpad / Trackpad pinch-to-zoom gesture (browser fires wheel with ctrlKey)
+      // Continuous fractional deltaY scaling
+      const factor = Math.exp(-e.deltaY * 0.01);
+      zoomBy(factor, e.clientX, e.clientY);
+    } else if (e.deltaMode !== 0 || (Math.abs(e.deltaY) >= 40 && Math.abs(e.deltaX) === 0)) {
+      // 2. Physical notched desktop mouse wheel
+      const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+      zoomBy(factor, e.clientX, e.clientY);
+    } else {
+      // 3. Touchpad two-finger pan scroll
+      panX -= e.deltaX;
+      panY -= e.deltaY;
+      updateInspectorTransform();
+    }
+  }, { passive: false });
+
+  // Touch pan & pinch zoom support (for mobile/tablet touch screens)
+  let lastTouchDist = 0;
+  let lastTouchMidX = 0;
+  let lastTouchMidY = 0;
+
+  inspectorViewport.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      dragStartX = e.touches[0].clientX - panX;
+      dragStartY = e.touches[0].clientY - panY;
+    } else if (e.touches.length === 2) {
+      isDragging = false;
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      lastTouchDist = Math.hypot(dx, dy);
+      lastTouchMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      lastTouchMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    }
+  }, { passive: true });
+
+  inspectorViewport.addEventListener("touchmove", (e) => {
+    if (e.touches.length === 1 && isDragging) {
+      panX = e.touches[0].clientX - dragStartX;
+      panY = e.touches[0].clientY - dragStartY;
+      updateInspectorTransform();
+    } else if (e.touches.length === 2 && lastTouchDist > 0) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const currentDist = Math.hypot(dx, dy);
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+
+      if (lastTouchDist > 0 && currentDist > 0) {
+        const factor = currentDist / lastTouchDist;
+        zoomBy(factor, midX, midY);
+      }
+
+      panX += (midX - lastTouchMidX);
+      panY += (midY - lastTouchMidY);
+      updateInspectorTransform();
+
+      lastTouchDist = currentDist;
+      lastTouchMidX = midX;
+      lastTouchMidY = midY;
+    }
+  }, { passive: true });
+
+  inspectorViewport.addEventListener("touchend", () => {
+    isDragging = false;
+    lastTouchDist = 0;
+  });
+
+  // Inspector HUD Controls
+  btnZoomIn.addEventListener("click", () => zoomBy(1.3));
+  btnZoomOut.addEventListener("click", () => zoomBy(1 / 1.3));
+  btnZoom100.addEventListener("click", zoomTo100);
+  btnZoomFit.addEventListener("click", zoomToFit);
+  btnTogglePixelated.addEventListener("click", () => {
+    isPixelated = !isPixelated;
+    inspectorImg.classList.toggle("pixelated", isPixelated);
+    btnTogglePixelated.classList.toggle("active", isPixelated);
+  });
+
+  // Global Keyboard Shortcuts
+  window.addEventListener("keydown", (e) => {
+    if (modalAbout && !modalAbout.classList.contains("hidden") && e.key === "Escape") {
+      modalAbout.classList.add("hidden");
+      return;
+    }
+
+    if (!isInspectorOpen) return;
+
+    if (e.key === "Escape") {
+      closeInspector();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      const nextIdx = (currentInspectorIdx - 1 + inspectorItems.length) % inspectorItems.length;
+      selectInspectorModel(nextIdx, true);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      const nextIdx = (currentInspectorIdx + 1) % inspectorItems.length;
+      selectInspectorModel(nextIdx, true);
+    } else if (e.key === "+" || e.key === "=") {
+      e.preventDefault();
+      zoomBy(1.25);
+    } else if (e.key === "-" || e.key === "_") {
+      e.preventDefault();
+      zoomBy(1 / 1.25);
+    } else if (e.key === "0") {
+      e.preventDefault();
+      zoomToFit();
+    } else if (e.key === "1") {
+      e.preventDefault();
+      zoomTo100();
+    } else if (e.key.toLowerCase() === "p") {
+      e.preventDefault();
+      btnTogglePixelated.click();
+    }
+  });
+
+  // 8. Reset & About Modal
   btnReset.addEventListener("click", () => {
     currentFile = null;
     currentRefFile = null;
