@@ -70,11 +70,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const viewCardsContainer = document.getElementById("view-container-cards");
   const viewSliderContainer = document.getElementById("view-container-slider");
+  const cocoSlider = document.getElementById("coco-slider");
+  const sliderDivider = document.getElementById("slider-divider");
+  const sliderHandle = document.getElementById("slider-handle");
   const sliderModelSelect = document.getElementById("slider-model-select");
   const sliderImgBefore = document.getElementById("slider-img-before");
   const sliderImgAfter = document.getElementById("slider-img-after");
   const sliderBeforeWrapper = document.getElementById("slider-before-wrapper");
   const sliderRange = document.getElementById("slider-range");
+  const sliderPctLabel = document.getElementById("slider-pct-label");
+  const sliderBadgeBeforeText = document.getElementById("slider-badge-before-text");
+  const sliderBadgeAfterText = document.getElementById("slider-badge-after-text");
+  const sliderPresetButtons = document.querySelectorAll(".btn-slider-preset");
+  const sliderDragHint = document.getElementById("slider-drag-hint");
 
   const metricsTableBody = document.querySelector("#metrics-table tbody");
   const psnrChart = document.getElementById("psnr-chart");
@@ -423,21 +431,131 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     sliderImgBefore.src = data.hr_b64 || data.lr_b64;
+    if (sliderBadgeBeforeText) {
+      sliderBadgeBeforeText.textContent = data.hr_b64 ? "Before (Ground Truth)" : "Before (Input LR)";
+    }
 
     function updateSliderImages() {
       const selIdx = parseInt(sliderModelSelect.value) || 0;
       const res = validResults[selIdx];
       if (res) {
         sliderImgAfter.src = res.sr_b64;
+        if (sliderBadgeAfterText) {
+          sliderBadgeAfterText.textContent = `After: ${res.model_label} (x${res.scale})`;
+        }
       }
     }
 
     sliderModelSelect.onchange = updateSliderImages;
     updateSliderImages();
 
-    sliderRange.oninput = (e) => {
-      sliderBeforeWrapper.style.width = `${e.target.value}%`;
-    };
+    let currentPct = 50;
+
+    function updateSliderPosition(pct, syncRangeInput = true) {
+      currentPct = Math.max(0, Math.min(100, pct));
+      if (cocoSlider) {
+        cocoSlider.style.setProperty("--slider-pos", `${currentPct}%`);
+        cocoSlider.setAttribute("aria-valuenow", Math.round(currentPct));
+      }
+      if (sliderBeforeWrapper) {
+        sliderBeforeWrapper.style.clipPath = `inset(0 ${100 - currentPct}% 0 0)`;
+      }
+      if (sliderDivider) {
+        sliderDivider.style.left = `${currentPct}%`;
+      }
+      if (syncRangeInput && sliderRange) {
+        sliderRange.value = Math.round(currentPct);
+      }
+      if (sliderPctLabel) {
+        sliderPctLabel.textContent = `${Math.round(currentPct)}%`;
+      }
+      const rounded = Math.round(currentPct);
+      sliderPresetButtons.forEach((btn) => {
+        const targetPos = parseInt(btn.dataset.pos, 10);
+        btn.classList.toggle("active", targetPos === rounded);
+      });
+    }
+
+    // Connect Range Input
+    if (sliderRange) {
+      sliderRange.oninput = (e) => {
+        updateSliderPosition(parseFloat(e.target.value), false);
+      };
+    }
+
+    // Connect Presets
+    sliderPresetButtons.forEach((btn) => {
+      btn.onclick = () => {
+        const targetPos = parseInt(btn.dataset.pos, 10);
+        updateSliderPosition(targetPos, true);
+      };
+    });
+
+    // Connect Dragging directly on image and handle
+    if (cocoSlider) {
+      let isDragging = false;
+
+      function getPosFromPointer(e) {
+        const rect = cocoSlider.getBoundingClientRect();
+        if (rect.width <= 0) return 50;
+        const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+        const offsetX = clientX - rect.left;
+        return Math.max(0, Math.min(100, (offsetX / rect.width) * 100));
+      }
+
+      function onPointerDown(e) {
+        if (e.button !== undefined && e.button !== 0) return;
+        isDragging = true;
+        cocoSlider.classList.add("is-dragging");
+        cocoSlider.classList.add("hint-hidden");
+        try {
+          cocoSlider.setPointerCapture(e.pointerId);
+        } catch (_) {}
+        const pct = getPosFromPointer(e);
+        updateSliderPosition(pct, true);
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const pct = getPosFromPointer(e);
+        updateSliderPosition(pct, true);
+      }
+
+      function onPointerUp(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        cocoSlider.classList.remove("is-dragging");
+        try {
+          cocoSlider.releasePointerCapture(e.pointerId);
+        } catch (_) {}
+      }
+
+      cocoSlider.onpointerdown = onPointerDown;
+      cocoSlider.onpointermove = onPointerMove;
+      cocoSlider.onpointerup = onPointerUp;
+      cocoSlider.onpointercancel = onPointerUp;
+
+      // Accessible keyboard control on slider
+      cocoSlider.onkeydown = (e) => {
+        const step = e.shiftKey ? 10 : 2;
+        if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+          e.preventDefault();
+          updateSliderPosition(currentPct - step, true);
+        } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+          e.preventDefault();
+          updateSliderPosition(currentPct + step, true);
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          updateSliderPosition(0, true);
+        } else if (e.key === "End") {
+          e.preventDefault();
+          updateSliderPosition(100, true);
+        }
+      };
+    }
+
+    // Initialize to 50%
+    updateSliderPosition(50, true);
   }
 
   function renderMetricsTableAndChart(data) {
@@ -518,6 +636,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btnViewSlider.classList.add("active");
       viewCardsContainer.classList.add("hidden");
       viewSliderContainer.classList.remove("hidden");
+      if (currentRunResults) renderSliderView(currentRunResults);
     } else if (mode === "diff") {
       btnViewDiff.classList.add("active");
       viewCardsContainer.classList.remove("hidden");

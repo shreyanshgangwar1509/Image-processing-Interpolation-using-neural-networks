@@ -40,17 +40,16 @@ def test_lr_inference_runs_interpolation_methods_at_their_scales(tmp_path, monke
         filename="input.png", file=io.BytesIO(image_buffer.getvalue())
     )
 
-    result = asyncio.run(
-        run_inference(
-            file=uploaded_file,
-            mode="lr_input",
-            selected_models="interpolation_nearest_x2,interpolation_bilinear_x4",
-            device_request="cpu",
-            degradation_type="bicubic",
-            noise_sigma=15.0,
-            ref_file=None,
-        )
+    call_res = run_inference(
+        file=uploaded_file,
+        mode="lr_input",
+        selected_models="interpolation_nearest_x2,interpolation_bilinear_x4",
+        device_request="cpu",
+        degradation_type="bicubic",
+        noise_sigma=15.0,
+        ref_file=None,
     )
+    result = asyncio.run(call_res) if asyncio.iscoroutine(call_res) else call_res
 
     assert [(item["width"], item["height"]) for item in result["results"]] == [
         (12, 10),

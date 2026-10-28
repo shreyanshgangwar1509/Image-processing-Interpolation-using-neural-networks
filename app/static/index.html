@@ -184,16 +184,45 @@
 
           <!-- Slider View Container -->
           <div id="view-container-slider" class="slider-container card hidden">
-            <div class="slider-controls">
-              <label>Compare Input/Reference with Model:</label>
-              <select id="slider-model-select" class="form-control select-inline"></select>
-            </div>
-            <div id="coco-slider" class="coco-slider">
-              <img id="slider-img-after" src="" alt="SR Output">
-              <div id="slider-before-wrapper" class="slider-before-wrapper">
-                <img id="slider-img-before" src="" alt="Before Input">
+            <div class="slider-toolbar">
+              <div class="slider-toolbar-group">
+                <label for="slider-model-select" class="tool-label">Compare With:</label>
+                <select id="slider-model-select" class="form-control select-inline"></select>
               </div>
-              <input type="range" id="slider-range" min="0" max="100" value="50" class="slider-range">
+              <div class="slider-toolbar-group slider-presets" role="group" aria-label="Slider split presets">
+                <span class="tool-label">Preset:</span>
+                <button type="button" class="btn btn-sm btn-tool btn-slider-preset" data-pos="0">Before (0%)</button>
+                <button type="button" class="btn btn-sm btn-tool btn-slider-preset active" data-pos="50">Split (50%)</button>
+                <button type="button" class="btn btn-sm btn-tool btn-slider-preset" data-pos="100">After (100%)</button>
+              </div>
+              <div class="slider-toolbar-group slider-control-group">
+                <label for="slider-range" class="tool-label">Divider:</label>
+                <input type="range" id="slider-range" min="0" max="100" value="50" class="slider-range-input" aria-label="Before/after split slider">
+                <span id="slider-pct-label" class="badge slider-pct-badge">50%</span>
+              </div>
+            </div>
+
+            <div id="coco-slider" class="coco-slider" tabindex="0" role="slider" aria-label="Before and after image comparison slider. Drag horizontally or use arrow keys." aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+              <img id="slider-img-after" src="" alt="Enhanced Super-Resolution Output">
+              <div id="slider-before-wrapper" class="slider-before-wrapper">
+                <img id="slider-img-before" src="" alt="Original Input or Reference">
+              </div>
+              <div id="slider-divider" class="slider-divider">
+                <div id="slider-handle" class="slider-handle" title="Drag horizontally to compare before and after">
+                  <span class="handle-arrow">◀</span>
+                  <span class="handle-line"></span>
+                  <span class="handle-arrow">▶</span>
+                </div>
+              </div>
+              <div class="slider-tag slider-tag-before">
+                <span class="slider-tag-dot tag-dot-before"></span>
+                <span id="slider-badge-before-text">Before (Input)</span>
+              </div>
+              <div class="slider-tag slider-tag-after">
+                <span id="slider-badge-after-text">After (Enhanced)</span>
+                <span class="slider-tag-dot tag-dot-after"></span>
+              </div>
+              <div class="slider-drag-hint" id="slider-drag-hint">Drag across image or handle to compare</div>
             </div>
           </div>
 
