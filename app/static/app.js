@@ -73,7 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const cocoSlider = document.getElementById("coco-slider");
   const sliderDivider = document.getElementById("slider-divider");
   const sliderHandle = document.getElementById("slider-handle");
-  const sliderModelSelect = document.getElementById("slider-model-select");
+  const sliderBeforeSelect = document.getElementById("slider-before-select");
+  const sliderAfterSelect = document.getElementById("slider-after-select");
   const sliderImgBefore = document.getElementById("slider-img-before");
   const sliderImgAfter = document.getElementById("slider-img-after");
   const sliderBeforeWrapper = document.getElementById("slider-before-wrapper");
@@ -418,35 +419,113 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderSliderView(data) {
-    sliderModelSelect.innerHTML = "";
-    const validResults = data.results.filter((r) => !r.error);
+    if (!sliderBeforeSelect || !sliderAfterSelect) return;
 
-    if (validResults.length === 0) return;
+    sliderBeforeSelect.innerHTML = "";
+    sliderAfterSelect.innerHTML = "";
 
-    validResults.forEach((r, idx) => {
-      const opt = document.createElement("option");
-      opt.value = idx;
-      opt.textContent = `${r.model_label} (x${r.scale})`;
-      sliderModelSelect.appendChild(opt);
-    });
+    const compareOptions = [];
 
-    sliderImgBefore.src = data.hr_b64 || data.lr_b64;
-    if (sliderBadgeBeforeText) {
-      sliderBadgeBeforeText.textContent = data.hr_b64 ? "Before (Ground Truth)" : "Before (Input LR)";
+    if (data.mode === "hr_reference") {
+      if (data.hr_b64) {
+        compareOptions.push({
+          id: "orig_hr",
+          label: "Original",
+          src: data.hr_b64,
+        });
+      }
+      if (data.lr_b64) {
+        compareOptions.push({
+          id: "orig_lr",
+          label: "Original LR",
+          src: data.lr_b64,
+        });
+      }
+    } else {
+      // lr_input mode
+      if (data.hr_b64) {
+        // Optional ground truth HR reference provided
+        compareOptions.push({
+          id: "orig_hr",
+          label: "Original",
+          src: data.hr_b64,
+        });
+        if (data.lr_b64) {
+          compareOptions.push({
+            id: "orig_lr",
+            label: "Original LR",
+            src: data.lr_b64,
+          });
+        }
+      } else if (data.lr_b64) {
+        // Only LR input provided
+        compareOptions.push({
+          id: "orig_lr",
+          label: "Original",
+          src: data.lr_b64,
+        });
+      }
     }
 
+    // Add evaluated models that ran without error
+    const validResults = (data.results || []).filter((r) => !r.error && r.sr_b64);
+    validResults.forEach((r, idx) => {
+      compareOptions.push({
+        id: `model_${idx}`,
+        label: `${r.model_label} (x${r.scale})`,
+        src: r.sr_b64,
+      });
+    });
+
+    if (compareOptions.length === 0) return;
+
+    compareOptions.forEach((opt, idx) => {
+      const elBefore = document.createElement("option");
+      elBefore.value = idx;
+      elBefore.textContent = opt.label;
+      sliderBeforeSelect.appendChild(elBefore);
+
+      const elAfter = document.createElement("option");
+      elAfter.value = idx;
+      elAfter.textContent = opt.label;
+      sliderAfterSelect.appendChild(elAfter);
+    });
+
+    // Default left to "Original" (index 0)
+    const defaultBeforeIdx = 0;
+    // Default right to the first evaluated model, or index 1
+    let defaultAfterIdx = compareOptions.findIndex((opt) => opt.id.startsWith("model_"));
+    if (defaultAfterIdx === -1) {
+      defaultAfterIdx = compareOptions.length > 1 ? 1 : 0;
+    }
+
+    sliderBeforeSelect.value = String(defaultBeforeIdx);
+    sliderAfterSelect.value = String(defaultAfterIdx);
+
     function updateSliderImages() {
-      const selIdx = parseInt(sliderModelSelect.value) || 0;
-      const res = validResults[selIdx];
-      if (res) {
-        sliderImgAfter.src = res.sr_b64;
+      const beforeIdx = parseInt(sliderBeforeSelect.value, 10) || 0;
+      const afterIdx = parseInt(sliderAfterSelect.value, 10) || 0;
+
+      const beforeOpt = compareOptions[beforeIdx] || compareOptions[0];
+      const afterOpt = compareOptions[afterIdx] || compareOptions[compareOptions.length > 1 ? 1 : 0];
+
+      if (beforeOpt && sliderImgBefore) {
+        sliderImgBefore.src = beforeOpt.src;
+        if (sliderBadgeBeforeText) {
+          sliderBadgeBeforeText.textContent = beforeOpt.label;
+        }
+      }
+
+      if (afterOpt && sliderImgAfter) {
+        sliderImgAfter.src = afterOpt.src;
         if (sliderBadgeAfterText) {
-          sliderBadgeAfterText.textContent = `After: ${res.model_label} (x${res.scale})`;
+          sliderBadgeAfterText.textContent = afterOpt.label;
         }
       }
     }
 
-    sliderModelSelect.onchange = updateSliderImages;
+    sliderBeforeSelect.onchange = updateSliderImages;
+    sliderAfterSelect.onchange = updateSliderImages;
     updateSliderImages();
 
     let currentPct = 50;

@@ -185,9 +185,11 @@
           <!-- Slider View Container -->
           <div id="view-container-slider" class="slider-container card hidden">
             <div class="slider-toolbar">
-              <div class="slider-toolbar-group">
-                <label for="slider-model-select" class="tool-label">Compare With:</label>
-                <select id="slider-model-select" class="form-control select-inline"></select>
+              <div class="slider-toolbar-group slider-compare-group">
+                <label class="tool-label">Compare:</label>
+                <select id="slider-before-select" class="form-control select-inline select-compare" title="Left side image (Before)"></select>
+                <span class="compare-vs">vs</span>
+                <select id="slider-after-select" class="form-control select-inline select-compare" title="Right side image (After)"></select>
               </div>
               <div class="slider-toolbar-group slider-presets" role="group" aria-label="Slider split presets">
                 <span class="tool-label">Preset:</span>

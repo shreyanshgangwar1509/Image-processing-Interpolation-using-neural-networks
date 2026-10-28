@@ -750,6 +750,26 @@ body {
   gap: 0.6rem;
 }
 
+.slider-compare-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.select-compare {
+  min-width: 135px;
+  max-width: 195px;
+}
+
+.compare-vs {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 0 0.15rem;
+  user-select: none;
+}
+
 .select-inline {
   width: auto;
   min-width: 180px;
@@ -994,6 +1014,16 @@ body {
     justify-content: space-between;
     width: 100%;
   }
+  .slider-compare-group {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .select-compare {
+    flex: 1;
+    min-width: 120px;
+    max-width: 100%;
+  }
+
   .slider-range-input {
     flex: 1;
   }
