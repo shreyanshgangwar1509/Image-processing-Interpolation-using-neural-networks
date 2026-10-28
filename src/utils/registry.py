@@ -54,3 +54,7 @@ class Registry:
     def names(self) -> List[str]:
         """Returns a sorted list of registered component names."""
         return sorted(list(self._module_dict.keys()))
+
+    def __contains__(self, name: str) -> bool:
+        """Enables 'name in registry' syntax."""
+        return name in self._module_dict

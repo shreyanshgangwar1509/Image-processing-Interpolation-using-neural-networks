@@ -37,7 +37,7 @@ class ImageFolderDataset(Dataset):
         if not self.root.exists() or not self.root.is_dir():
             raise FileNotFoundError(
                 f"Data folder '{self.root}' does not exist or is not a directory. "
-                "Expected images in this folder. See HOW_TO_RUN.md for dataset setup instructions."
+                "Expected images in this folder. See docs/SETUP.md for dataset setup instructions."
             )
 
         self.image_paths = list_images(self.root)
@@ -45,7 +45,7 @@ class ImageFolderDataset(Dataset):
             raise ValueError(
                 f"No images found in data folder '{self.root}'. "
                 "Supported extensions: .png, .jpg, .jpeg, .bmp. "
-                "See HOW_TO_RUN.md for dataset setup instructions."
+                "See docs/SETUP.md for dataset setup instructions."
             )
 
         if max_images is not None and max_images > 0:

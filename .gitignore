@@ -1,8 +1,8 @@
+# Data & Gitkeep
 data/*
 !data/.gitkeep
-results/*/checkpoints/
-*.pth
-*.pt
+
+# Python & Virtual Environments
 __pycache__/
 *.pyc
 **/__pycache__/**
@@ -12,17 +12,26 @@ venv/
 .pytest_cache/
 .DS_Store
 
-results/baselines_x2_clean/samples
-results/baselines_x4_clean/samples
-results/baselines_x4_noise15/samples
-results/our_nn_x4_clean/samples
-results/smoke_test
-results/our_nn_x4_clean_a2_attn/samples
-results/our_nn_x4_clean_a0_plain/samples
-results/our_nn_x4_noise15_a0_plain/samples
-results/our_nn*/samples
-results/srcnn*/samples
-kaggle_out/
-kaggle_out2
-kaggle2
-kaggle_out3
+# Environment & Credentials
+.env
+.env.*
+!.env.example
+
+# Weights & Checkpoints
+*.pth
+*.pt
+results/*/checkpoints/
+
+# Results Samples & Smoke tests
+results/*/samples/
+results/smoke_test*/
+
+# Run logs and summaries
+*.log
+run_summary.txt
+results/run_summary.txt
+results/sr-run.log
+
+# Kaggle outputs and generated metadata
+kaggle_out*/
+kaggle/kernel-metadata.json

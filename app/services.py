@@ -3,6 +3,7 @@ import io
 import json
 import logging
 from pathlib import Path
+import re
 import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 import zipfile
@@ -25,8 +26,105 @@ from src.utils.device import get_device
 logger = logging.getLogger("sr_project.app")
 
 
-def discover_eligible_models(repo_root: Path) -> List[Dict[str, Any]]:
-    """Returns standard interpolation methods and eligible neural checkpoints."""
+# Cache for dynamically discovered models to avoid redundant filesystem walks
+_MODEL_CACHE: Dict[str, Any] = {
+    "fingerprint": None,
+    "models": [],
+}
+
+
+def _format_model_label(
+    exp_name: str,
+    model_name: str,
+    scale: int,
+    degradation_tag: str,
+    params: Dict[str, Any],
+    custom_label: Optional[str] = None,
+) -> str:
+    """Formats a clean, consistent user-facing model label."""
+    if custom_label:
+        return custom_label
+
+    name_map = {
+        "our_nn": "OurNN",
+        "srcnn": "SRCNN",
+        "edsr_lite": "EDSR-Lite",
+        "espcn": "ESPCN",
+        "nearest": "Nearest",
+        "bilinear": "Bilinear",
+        "bicubic": "Bicubic",
+        "lanczos": "Lanczos",
+    }
+    arch = name_map.get(model_name, model_name.upper())
+
+    variant = ""
+    if model_name == "our_nn":
+        if params.get("use_attention"):
+            variant = " [Attn]"
+        elif params.get("use_skip"):
+            variant = " [Skip]"
+        elif "a0" in exp_name.lower() or "plain" in exp_name.lower():
+            variant = " [Plain]"
+
+    deg = "Clean"
+    if "noise" in degradation_tag.lower() or "noise" in exp_name.lower():
+        match = re.search(r"noise(\d+)|s(\d+)", degradation_tag + exp_name, re.IGNORECASE)
+        noise_val = (match.group(1) or match.group(2)) if match else "15"
+        deg = f"Noise σ={noise_val}"
+
+    return f"{arch}{variant} (×{scale}, {deg})"
+
+
+def _find_checkpoint_and_config(dir_path: Path) -> Tuple[Optional[Path], Optional[Path]]:
+    """Finds best.pth (or variant) and resolved config in an experiment directory."""
+    ckpt_candidates = [
+        dir_path / "checkpoints" / "best.pth",
+        dir_path / "best.pth",
+        dir_path / f"{dir_path.name}.pth",
+        dir_path / "model.pth",
+    ]
+    ckpt_path = next((p for p in ckpt_candidates if p.is_file() and p.stat().st_size > 0), None)
+
+    cfg_candidates = [
+        dir_path / "config_resolved.yaml",
+        dir_path / "config.yaml",
+    ]
+    cfg_path = next((p for p in cfg_candidates if p.is_file() and p.stat().st_size > 0), None)
+
+    return ckpt_path, cfg_path
+
+
+def discover_eligible_models(repo_root: Path, force_reload: bool = False) -> List[Dict[str, Any]]:
+    """Returns standard interpolation methods and dynamically discovered neural checkpoints.
+
+    Uses an in-memory cache validated against directory modification times (mtime)
+    to avoid re-reading disk and re-instantiating models on every HTTP request, while
+    automatically picking up newly added runs upon page refresh.
+    """
+    global _MODEL_CACHE
+
+    search_roots = [
+        repo_root / "results",
+        repo_root / "weights",
+        repo_root / "checkpoints",
+    ]
+    valid_roots = [r for r in search_roots if r.is_dir()]
+
+    # Compute cache fingerprint based on directory mtimes
+    fingerprint_parts = []
+    for r in valid_roots:
+        try:
+            mtimes = sorted((d.name, d.stat().st_mtime) for d in r.iterdir() if d.is_dir())
+            fingerprint_parts.append((r.name, r.stat().st_mtime, mtimes))
+        except Exception:
+            pass
+
+    current_fingerprint = str(fingerprint_parts)
+
+    if not force_reload and _MODEL_CACHE["fingerprint"] == current_fingerprint and _MODEL_CACHE["models"]:
+        return _MODEL_CACHE["models"]
+
+    # Baseline classical interpolation models
     eligible_models = [
         {
             "id": f"interpolation_{model_name}_x{scale}",
@@ -47,74 +145,85 @@ def discover_eligible_models(repo_root: Path) -> List[Dict[str, Any]]:
         )
     ]
 
-    results_dir = repo_root / "results"
-    if not results_dir.exists():
-        return eligible_models
+    discovered_ids = set()
 
-    for exp_dir in sorted(results_dir.iterdir()):
-        if not exp_dir.is_dir():
-            continue
-
-        exp_name = exp_dir.name
-        # Skip smoke test runs
-        if "smoke_test" in exp_name.lower():
-            continue
-
-        ckpt_path = exp_dir / "checkpoints" / "best.pth"
-        cfg_path = exp_dir / "config_resolved.yaml"
-
-        if not ckpt_path.exists() or not cfg_path.exists():
-            continue
-
-        try:
-            with open(cfg_path, "r", encoding="utf-8") as f:
-                cfg = yaml.safe_load(f) or {}
-
-            # Classical baselines have 'models' list, single neural models have 'model' dict
-            if "model" not in cfg or not isinstance(cfg["model"], dict):
+    for root_dir in valid_roots:
+        for exp_dir in sorted(root_dir.iterdir()):
+            if not exp_dir.is_dir():
                 continue
 
-            model_cfg = cfg["model"]
-            model_name = model_cfg.get("name")
-            if not model_name:
+            exp_name = exp_dir.name
+            # Skip smoke tests and transient folders
+            if "smoke_test" in exp_name.lower():
                 continue
 
-            scale = int(cfg.get("scale", 4))
-            params = model_cfg.get("params", {})
-            m_label = model_cfg.get("label", exp_name)
+            ckpt_path, cfg_path = _find_checkpoint_and_config(exp_dir)
+            if not ckpt_path or not cfg_path:
+                continue
 
-            # Try building model to verify validity
             try:
-                model_inst = MODELS.build(model_name, scale=scale, **params)
-                param_count = count_parameters(model_inst)
-            except Exception as build_err:
-                logger.warning(f"Skipping '{exp_name}': failed to build model '{model_name}': {build_err}")
+                with open(cfg_path, "r", encoding="utf-8") as f:
+                    cfg = yaml.safe_load(f) or {}
+
+                if "model" not in cfg or not isinstance(cfg["model"], dict):
+                    continue
+
+                model_cfg = cfg["model"]
+                model_name = model_cfg.get("name")
+                if not model_name or model_name not in MODELS.names():
+                    continue
+
+                scale = int(cfg.get("scale", 4))
+                params = model_cfg.get("params", {})
+                custom_label = model_cfg.get("label")
+
+                # Verify model can be built and count parameters
+                try:
+                    model_inst = MODELS.build(model_name, scale=scale, **params)
+                    param_count = count_parameters(model_inst)
+                except Exception as build_err:
+                    logger.warning(f"Skipping '{exp_name}': failed to build model '{model_name}': {build_err}")
+                    continue
+
+                degradation_cfgs = cfg.get("degradation", [])
+                pipeline = DegradationPipeline(degradation_cfgs, scale=scale)
+                degradation_tag = pipeline.tag
+
+                m_label = _format_model_label(
+                    exp_name=exp_name,
+                    model_name=model_name,
+                    scale=scale,
+                    degradation_tag=degradation_tag,
+                    params=params,
+                    custom_label=custom_label,
+                )
+
+                model_id = exp_name
+                if model_id in discovered_ids:
+                    continue
+                discovered_ids.add(model_id)
+
+                eligible_models.append(
+                    {
+                        "id": model_id,
+                        "label": m_label,
+                        "experiment_name": exp_name,
+                        "model_name": model_name,
+                        "type": "neural",
+                        "scale": scale,
+                        "degradation": degradation_tag,
+                        "param_count": param_count,
+                        "checkpoint_path": str(ckpt_path.relative_to(repo_root)),
+                        "config_path": str(cfg_path.relative_to(repo_root)),
+                    }
+                )
+
+            except Exception as e:
+                logger.warning(f"Error parsing experiment folder '{exp_name}': {e}")
                 continue
 
-            # Extract degradation tag
-            degradation_cfgs = cfg.get("degradation", [])
-            pipeline = DegradationPipeline(degradation_cfgs, scale=scale)
-            degradation_tag = pipeline.tag
-
-            eligible_models.append(
-                {
-                    "id": exp_name,
-                    "label": m_label,
-                    "experiment_name": exp_name,
-                    "model_name": model_name,
-                    "type": "neural",
-                    "scale": scale,
-                    "degradation": degradation_tag,
-                    "param_count": param_count,
-                    "checkpoint_path": str(ckpt_path.relative_to(repo_root)),
-                    "config_path": str(cfg_path.relative_to(repo_root)),
-                }
-            )
-
-        except Exception as e:
-            logger.warning(f"Error parsing experiment folder '{exp_name}': {e}")
-            continue
-
+    _MODEL_CACHE["fingerprint"] = current_fingerprint
+    _MODEL_CACHE["models"] = eligible_models
     return eligible_models
 
 

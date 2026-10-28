@@ -1,3 +1,0 @@
-config | status | minutes
-configs/our_nn_x4_noise15_a0_plain.yaml | ok | 175.5
-total hours: 2.93
