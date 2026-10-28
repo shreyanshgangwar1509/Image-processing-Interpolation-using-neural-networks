@@ -26,6 +26,7 @@ All detailed guides and specifications are located in the [`docs/`](docs/) direc
 | **[docs/SETUP.md](docs/SETUP.md)** | Environment setup, Python virtualenvs, CUDA drivers, dataset downloads, smoke tests, and Web GUI guide. |
 | **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** | Pipeline overview, classical interpolation baselines, deep models (SRCNN, ESPCN, EDSR-Lite), and the custom `OurNN` architecture with ablation study. |
 | **[docs/TRAIN.md](docs/TRAIN.md)** | Local training, CLI overrides, remote GPU training on Kaggle via `.env`, and results aggregation. |
+| **[docs/BENCHMARK.md](docs/BENCHMARK.md)** | Quantitative benchmark tables (Set5, Set14, BSD100, Urban100), ablation analysis, parameter efficiency, and qualitative upscale comparisons. |
 
 ---
 
