@@ -34,6 +34,19 @@ def load_env(env_path: Path) -> dict:
     return env
 
 
+def get_default_kaggle_username() -> str | None:
+    """Detect Kaggle username from ~/.kaggle/credentials.json or ~/.kaggle/kaggle.json if available."""
+    for path in [Path.home() / ".kaggle" / "credentials.json", Path.home() / ".kaggle" / "kaggle.json"]:
+        if path.exists():
+            try:
+                data = json.loads(path.read_text(encoding="utf-8"))
+                if "username" in data and data["username"]:
+                    return data["username"]
+            except Exception:
+                pass
+    return None
+
+
 def generate_metadata(username: str) -> None:
     """Generate kaggle/kernel-metadata.json for the specified username."""
     if TEMPLATE_METADATA.exists():
@@ -91,7 +104,12 @@ def main() -> None:
 
     env = load_env(ENV_FILE)
 
-    username = args.username or env.get("KAGGLE_USERNAME") or os.environ.get("KAGGLE_USERNAME")
+    username = (
+        args.username
+        or env.get("KAGGLE_USERNAME")
+        or os.environ.get("KAGGLE_USERNAME")
+        or get_default_kaggle_username()
+    )
     key = args.key or env.get("KAGGLE_KEY") or os.environ.get("KAGGLE_KEY")
     branch = args.branch or env.get("KAGGLE_BRANCH", "exp-v6")
     repo_url = args.repo_url or env.get("KAGGLE_REPO_URL", "https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git")
