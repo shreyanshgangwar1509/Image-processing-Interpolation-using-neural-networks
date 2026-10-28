@@ -25,6 +25,14 @@ results/*/checkpoints/
 # Results Samples & Smoke tests
 results/*/samples/
 results/smoke_test*/
+*.zip
+
+# Agent skills and lockfiles
+.agents/
+skills-lock.json
+
+# Test & browser artifacts
+.playwright-mcp/
 
 # Run logs and summaries
 *.log
