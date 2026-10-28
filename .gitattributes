@@ -1,0 +1,12 @@
+# Auto-detect text files and normalize line endings
+* text=auto
+
+# Explicitly declare binary files to prevent line ending conversion and corruption
+*.pth binary
+*.pt binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
+*.npy binary
+*.npz binary

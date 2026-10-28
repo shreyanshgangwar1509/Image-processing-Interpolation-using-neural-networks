@@ -63,11 +63,17 @@
             <div class="radio-group">
               <label class="radio-option">
                 <input type="radio" name="mode" value="lr_input" checked>
-                <span>Image is LR Input</span>
+                <div class="radio-text">
+                  <span class="radio-title">Image is LR Input</span>
+                  <span class="radio-desc">Direct upscaling of a low-res image (Metrics require optional HR reference)</span>
+                </div>
               </label>
               <label class="radio-option">
                 <input type="radio" name="mode" value="hr_reference">
-                <span>Image is HR Reference</span>
+                <div class="radio-text">
+                  <span class="radio-title">Image is HR Reference</span>
+                  <span class="radio-desc">Degrades HR image, upscales, and benchmarks PSNR/SSIM against original</span>
+                </div>
               </label>
             </div>
           </div>
@@ -88,6 +94,7 @@
             <div class="form-group">
               <label class="form-label">Optional Ground Truth HR Reference:</label>
               <input type="file" id="ref-file-input" accept="image/*" class="form-control file-input-sm">
+              <span class="file-hint">Attach original HR image to enable PSNR and SSIM quantitative metrics in LR mode.</span>
             </div>
           </div>
         </section>
@@ -246,7 +253,6 @@
                     <th>Inference Time</th>
                     <th>PSNR (dB) ↑</th>
                     <th>SSIM ↑</th>
-                    <th>LPIPS ↓</th>
                   </tr>
                 </thead>
                 <tbody></tbody>

@@ -1023,7 +1023,6 @@ body {
     min-width: 120px;
     max-width: 100%;
   }
-
   .slider-range-input {
     flex: 1;
   }
@@ -1370,3 +1369,81 @@ body {
 .hidden {
   display: none !important;
 }
+
+/* ==========================================================================
+   Placeholders & Refined Status Indicators (Issue #9)
+   ========================================================================== */
+.badge-warning {
+  background-color: rgba(234, 179, 8, 0.2);
+  color: #fde047;
+  border: 1px solid rgba(234, 179, 8, 0.35);
+}
+
+.chart-empty-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.25rem 1.5rem;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+}
+
+.chart-empty-placeholder .placeholder-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.chart-empty-placeholder .placeholder-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.chart-empty-placeholder .placeholder-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  max-width: 520px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.chart-empty-placeholder .placeholder-desc em {
+  color: var(--accent-blue);
+  font-style: normal;
+}
+
+.metric-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.82rem;
+}
+
+.param-analytical {
+  color: var(--accent-blue);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.radio-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.radio-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.86rem;
+}
+
+.radio-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.25;
+}
+

@@ -380,10 +380,16 @@ def create_export_zip(
         rows = []
         for res in results:
             m_info = res["metrics"]
+            param_display = (
+                "Analytical"
+                if res.get("model_type") == "interpolation" or not res.get("param_count")
+                else res.get("param_count")
+            )
             rows.append(
                 {
                     "model": res["model_label"],
                     "scale": res["scale"],
+                    "params": param_display,
                     "inference_time_s": res["inference_time_s"],
                     "output_width": res["width"],
                     "output_height": res["height"],

@@ -143,11 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (m.type === "interpolation") {
           chip.dataset.interpolation = "true";
         }
+        const isAnalytical = m.type === "interpolation" || !m.param_count;
+        const paramLabel = isAnalytical ? "Analytical" : `${(m.param_count / 1000).toFixed(1)}k`;
         chip.innerHTML = `
           <input type="checkbox" value="${m.id}" checked>
           <div class="chip-info">
             <span class="chip-title">${m.label}</span>
-            <span class="chip-sub">Scale: x${m.scale} | Degradation: ${m.degradation} | Params: ${(m.param_count / 1000).toFixed(1)}k</span>
+            <span class="chip-sub">Scale: x${m.scale} | Degradation: ${m.degradation} | Params: ${paramLabel}</span>
           </div>
         `;
         group.appendChild(chip);
@@ -643,21 +645,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const hasRef = data.has_reference;
     metricsRefBadge.textContent = hasRef ? "Ground Truth Reference Available" : "Reference Required for PSNR/SSIM";
-    metricsRefBadge.className = hasRef ? "badge badge-success" : "badge";
+    metricsRefBadge.className = hasRef ? "badge badge-success" : "badge badge-warning";
 
-    metricsNote.textContent = hasRef
+    metricsNote.innerHTML = hasRef
       ? "PSNR and SSIM evaluated on Y-channel (BT.601) with border cropping matching paper conventions."
-      : "No reference image supplied. Showing model metadata and inference runtime.";
+      : "<strong>LR Direct Upscaling:</strong> No High-Resolution reference image was supplied. Quantitative full-reference metrics (PSNR, SSIM) require an HR ground-truth image. Attach an optional HR reference above or switch to <strong>Image is HR Reference</strong> mode to compute fidelity.";
 
     const validResults = data.results.filter((r) => !r.error);
 
     // Find best metric values
-    let bestPsnr = -1, bestSsim = -1, bestLpips = 999;
+    let bestPsnr = -1, bestSsim = -1;
     validResults.forEach((r) => {
       const m = r.metrics || {};
       if (m.psnr && m.psnr > bestPsnr) bestPsnr = m.psnr;
       if (m.ssim && m.ssim > bestSsim) bestSsim = m.ssim;
-      if (m.lpips && m.lpips < bestLpips) bestLpips = m.lpips;
     });
 
     validResults.forEach((r) => {
@@ -666,21 +667,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const psnrCls = m.psnr === bestPsnr ? "best-val" : "";
       const ssimCls = m.ssim === bestSsim ? "best-val" : "";
-      const lpipsCls = m.lpips === bestLpips ? "best-val" : "";
+
+      const isAnalytical = r.model_type === "interpolation" || r.type === "interpolation" || !r.param_count;
+      const paramStr = isAnalytical
+        ? `<span class="param-analytical" title="Non-parametric mathematical algorithm">— (Analytical)</span>`
+        : (r.param_count ? `${(r.param_count / 1000).toFixed(1)}k` : "—");
+
+      const psnrText = (m.psnr !== undefined && m.psnr !== null)
+        ? `${m.psnr.toFixed(2)} dB`
+        : `<span class="metric-empty" title="${hasRef ? 'Metric calculation unavailable' : 'Ground truth HR reference required for PSNR'}">${hasRef ? 'N/A' : '— (No HR Ref)'}</span>`;
+
+      const ssimText = (m.ssim !== undefined && m.ssim !== null)
+        ? m.ssim.toFixed(4)
+        : `<span class="metric-empty" title="${hasRef ? 'Metric calculation unavailable' : 'Ground truth HR reference required for SSIM'}">${hasRef ? 'N/A' : '— (No HR Ref)'}</span>`;
 
       row.innerHTML = `
         <td><strong>${r.model_label}</strong></td>
         <td>x${r.scale}</td>
-        <td>${r.param_count ? (r.param_count / 1000).toFixed(1) + "k" : "N/A"}</td>
+        <td>${paramStr}</td>
         <td>${(r.inference_time_s * 1000).toFixed(1)} ms</td>
-        <td class="${psnrCls}">${m.psnr ? m.psnr.toFixed(2) + " dB" : "N/A"}</td>
-        <td class="${ssimCls}">${m.ssim ? m.ssim.toFixed(4) : "N/A"}</td>
-        <td class="${lpipsCls}">${m.lpips ? m.lpips.toFixed(4) : "N/A"}</td>
+        <td class="${psnrCls}">${psnrText}</td>
+        <td class="${ssimCls}">${ssimText}</td>
       `;
       metricsTableBody.appendChild(row);
+    });
 
-      // Render chart bar
-      if (m.psnr) {
+    // Render chart bars or placeholder if no reference
+    let renderedBars = 0;
+    validResults.forEach((r) => {
+      const m = r.metrics || {};
+      if (m.psnr !== undefined && m.psnr !== null) {
         const barRow = document.createElement("div");
         barRow.className = "chart-bar-row";
         const widthPct = Math.max(10, Math.min(100, (m.psnr / 40.0) * 100));
@@ -693,8 +709,19 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="chart-val">${m.psnr.toFixed(2)} dB</span>
         `;
         psnrChart.appendChild(barRow);
+        renderedBars++;
       }
     });
+
+    if (renderedBars === 0) {
+      psnrChart.innerHTML = `
+        <div class="chart-empty-placeholder">
+          <span class="placeholder-icon">📊</span>
+          <p class="placeholder-title">Fidelity Chart Unavailable Without Ground Truth</p>
+          <p class="placeholder-desc">PSNR and SSIM require an uncorrupted High-Resolution reference image. Attach an optional HR reference in LR mode or select <em>Image is HR Reference</em> mode in the sidebar to generate quantitative comparison bars.</p>
+        </div>
+      `;
+    }
   }
 
   // 6. View Mode Toggles & Column Density

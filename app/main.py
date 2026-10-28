@@ -216,21 +216,32 @@ def run_inference(
             metrics = {}
             diff_pil = None
             if gt_hr_tensor is not None:
-                # Check scale alignment
+                # Expected dimensions for this model's scale
                 expected_hr_w = lr_pil.width * scale
                 expected_hr_h = lr_pil.height * scale
 
+                # If reference matches expected scale dimensions exactly, use directly
                 if (
                     gt_hr_tensor.shape[2] == expected_hr_h
                     and gt_hr_tensor.shape[3] == expected_hr_w
                 ):
-                    metrics = compute_metrics(
-                        sr_tensor.cpu(), gt_hr_tensor, scale=scale
-                    )
-                    diff_pil = generate_diff_map(sr_pil, ground_truth_hr_pil)
+                    target_hr_tensor = gt_hr_tensor
+                    target_hr_pil = ground_truth_hr_pil
                 else:
+                    # Dynamically adapt HR reference to model's expected scale resolution
+                    target_hr_pil = ground_truth_hr_pil.resize(
+                        (expected_hr_w, expected_hr_h), Image.BICUBIC
+                    )
+                    target_hr_tensor = pil_to_tensor(target_hr_pil).unsqueeze(0)
+
+                try:
+                    metrics = compute_metrics(
+                        sr_tensor.cpu(), target_hr_tensor, scale=scale
+                    )
+                    diff_pil = generate_diff_map(sr_pil, target_hr_pil)
+                except Exception as m_err:
                     logger.warning(
-                        f"Mismatched reference size for model '{m_label}': expected ({expected_hr_w}x{expected_hr_h}), got ({gt_hr_tensor.shape[3]}x{gt_hr_tensor.shape[2]}). Metrics skipped."
+                        f"Metrics computation failed for model '{m_label}': {m_err}"
                     )
 
             model_results.append(
@@ -238,6 +249,7 @@ def run_inference(
                     "model_id": mid,
                     "model_label": m_label,
                     "model_name": minfo["model_name"],
+                    "model_type": minfo.get("type", "neural"),
                     "scale": scale,
                     "degradation": minfo["degradation"],
                     "param_count": minfo["param_count"],
