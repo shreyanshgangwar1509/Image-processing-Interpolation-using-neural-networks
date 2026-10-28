@@ -1,3 +1,0 @@
-config | status | minutes
-configs/our_nn_x4_clean_a2_attn.yaml | ok | 175.6
-total hours: 2.93

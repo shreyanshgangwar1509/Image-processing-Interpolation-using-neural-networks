@@ -9,7 +9,8 @@ What it does, in order:
      even if the session is killed. Download it with `kaggle kernels output`.
      Run scripts/aggregate_results.py on your own computer afterwards.
 
-Edit the block below, then `kaggle kernels push -p kaggle`.
+Use `python scripts/push_kaggle.py` locally to automatically configure and push this runner,
+or edit the block below and run `kaggle kernels push -p kaggle`.
 """
 import os
 import shutil
@@ -19,15 +20,14 @@ import time
 from pathlib import Path
 
 # ============================ EDIT THESE ============================
-REPO_URL = "https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git"   # must be public, or use a code dataset
+REPO_URL = "https://github.com/sureshkumarhere/Image-processing-Interpolation-using-neural-networks.git"
 BRANCH = "exp-v6"
 
-# Configs to run, in this order. Keep one stage per push (see the steps in the chat).
+# Configs to run, in this order. Keep one stage per push.
 CONFIGS = [
     "configs/our_nn_x4_noise15_a1_skip.yaml",
 ]
 
-# EXTRA_SET = ["data.loader.num_workers=4", "data.train.repeat=3"]
 EXTRA_SET = ["data.loader.num_workers=4", "data.train.repeat=3", "evaluation.save_samples=1"]
 
 # Do not START a new config after this many hours (Kaggle sessions end at about 9 h).

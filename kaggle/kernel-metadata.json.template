@@ -1,5 +1,5 @@
 {
-  "id": "santoshpatra9455/sr-run",
+  "id": "${KAGGLE_USERNAME}/sr-run",
   "title": "sr-run",
   "code_file": "run_on_kaggle.py",
   "language": "python",
